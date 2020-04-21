@@ -1,94 +1,88 @@
-Title:          URLCrazy Readme
-Version:        0.6
-Description:    UrlCrazy is for the study of domainname typos and URL hijacking
-Author:         Andrew Horton (urbanadventurer)
-Homepage:   	https://www.morningstarsecurity.com/research/urlcrazy
-Source:		https://github.com/urbanadventurer/urlcrazy
-Platforms:      Linux, Ruby
-License: Copyright Andrew Horton, 2012-2017. You have permission to use and distribute this software. You do not have permission to distribute modified versions without permission. You do not have permission to use this as part of a commercial service unless it forms part of a penetration testing service. For example a commercial service that provides domain protection for clients must obtain a license first. Email me if you require a license.
+# URLCrazy
+
+URLCrazy is an OSINT tool to generate and test domain typos or variations to detect or perform typo squatting, URL hijacking, phishing, and corporate espionage.
+
+Homepage:  https://www.morningstarsecurity.com/research/urlcrazy
+
+If you have any questions, comments or concerns regarding URLCrazy, please consult the documentation prior to contacting one of the developers. Your feedback is always welcome.
 
 
-Description
-------------
-Generate and test domain typos and variations to detect and perform typo squatting, URL hijacking,
-phishing, and corporate espionage.
+### Use Cases
+* Detect typo squatters profiting from typos on your domain name
+* Protect your brand by registering popular typos
+* Identify typo domain names that will receive traffic intended for another domain
+* Conduct phishing attacks during a penetration test
 
-Use Cases:
-	o) Detect typo squatters profiting from typos on your domain name
-	o) Protect your brand by registering popular typos
-	o) Identify typo domain names that will receive traffic intended for another domain
-	o) Conduct phishing attacks during a penetration test
-
-Features:
-	o) Generates 15 types of domain variants
-	o) Knows over 8000 common misspellings
-	o) Supports cosmic ray induced bit flipping
-	o) Multiple keyboard layouts (qwerty, azerty, qwertz, dvorak)
-	o) Checks if a domain variant is valid
-	o) Test if domain variants are in use
-	o) Estimate popularity of a domain variant
+### Features
+* Generates 15 types of domain variants
+* Knows over 8000 common misspellings
+* Supports cosmic ray induced bit flipping
+* Multiple keyboard layouts (qwerty, azerty, qwertz, dvorak)
+* Checks if a domain variant is valid
+* Test if domain variants are in use
+* Estimate popularity of a domain variant
 
 
-Types of Domain Variations Supported
-----------------------------------
-Character Omission.
+## Types of Domain Variations Supported
+
+### Character Omission
 These typos are created by leaving out a letter of the domain name, one letter at a time. For example, www.goole.com and www.gogle.com
 
-Character Repeat.
+### Character Repeat
 These typos are created by repeating a letter of the domain name. For example, www.ggoogle.com and www.gooogle.com
 
-Adjacent Character Swap.
+### Adjacent Character Swap
 These typos are created by swapping the order of adjacent letters in the domain name. For example, www.googel.com and www.ogogle.com
 
-Adjacent Character Replacement.
+### Adjacent Character Replacement
 These typos are created by replacing each letter of the domain name with letters to the immediate left and right on the keyboard. For example, www.googke.com and www.goohle.com
 
-Double Character Replacement.
+### Double Character Replacement.
 These typos are created by replacing identical, consecutive letters of the domain name with letters to the immediate left and right on the keyboard. For example, www.gppgle.com and www.giigle.com
 
-Adjacent Character Insertion.
+### Adjacent Character Insertion.
 These typos are created by inserting letters to the immediate left and right on the keyboard of each letter. For example, www.googhle.com and www.goopgle.com
 
-Missing Dot.
+### Missing Dot
 These typos are created by omitting a dot from the domainname. For example, wwwgoogle.com and www.googlecom
 
-Strip Dashes.
+### Strip Dashes
 These typos are created by omitting a dash from the domainname. For example, www.domain-name.com becomes www.domainname.com
 
-Singular or Pluralise.
+### Singular or Pluralise
 These typos are created by making a singular domain plural and vice versa. For example, www.google.com becomes www.googles.com and www.games.co.nz becomes www.game.co.nz
 
-Common Misspellings.
+### Common Misspellings
 Over 8000 common misspellings from Wikipedia. For example, www.youtube.com becomes www.youtub.com and www.abseil.com becomes www.absail.com
 
-Vowel Swapping.
+### Vowel Swapping
 Swap vowels within the domain name except for the first letter. For example, www.google.com becomes www.gaagle.com.
 
-Homophones.
+### Homophones
 Over 450 sets of words that sound the same when spoken. For example, www.base.com becomes www.bass.com.
 
-Bit Flipping.
+### Bit Flipping
 Each letter in a domain name is an 8bit character. The character is substituted with the set of valid characters that can be made after a single bit flip. For example, facebook.com becomes bacebook.com, dacebook.com, faaebook.com,fabebook.com,facabook.com, etc.
 
-Homoglyphs.
+### Homoglyphs
 One or more characters that look similar to another character but are different are called homogylphs. An example is that the lower case l looks similar to the numeral one, e.g. l vs 1. For example, google.com becomes goog1e.com.
 
-Wrong Top Level Domain.
+### Wrong Top Level Domain
 For example, www.trademe.co.nz becomes www.trademe.co.nz and www.google.com becomes www.google.org
 Uses the 19 most common top level domains.
 
-Wrong Second Level Domain.
+### Wrong Second Level Domain
 Uses an alternate, valid second level domain for the top level domain.
 For example, www.trademe.co.nz becomes www.trademe.ac.nz and www.trademe.iwi.nz
 
 
-Tips
---------------------------
+## Tips
+
 The output will often be wider than the width of your terminal. If this bothers you, output your report to a file or increase the width of your terminal.
 
 
-Supported Keyboard Layouts
----------------------------
+## Supported Keyboard Layouts
+
 Keyboard layouts supported are:
 	* QWERTY
 	* AZERTY
@@ -96,13 +90,13 @@ Keyboard layouts supported are:
 	* DVORAK
 
 
-Is the domain valid?
---------------------
+## Is the domain valid?
+
 UrlCrazy has a database of valid top level and second level domains. This information has been compiled from Wikipedia and domain registrars. We know whether a domain is valid by checking if it matches toplevel and second level domains. For example, www.trademe.co.bz is a valid domain in Belize which allows any second level domain registrations but www.trademe.xo.nz isn't because xo.nz isn't an allowed second level domain in New Zealand.
 
 
-Popularity Estimate
--------------------
+## Popularity Estimate
+
 We can estimate the relative popularity of a typo by measuring how often that typo appears on webpages. Querying goole.com for the number of search results for a typo gives us a indication of how popular a typo is.
 
 The drawback of this approach is that you need to manually identify and omit legitimate domains such as googles.com
@@ -117,42 +111,45 @@ For example, consider the following typos for google.com.
 17842 ggoogle.com
 
 
-IP Address
--------------------
+## IP Address
+
 An IP address for a typo domainname indicates it is in use.
 
 Tip: An IP repeating for multiple typos or IPs in a close range shows common ownership. For example, gogle.com, gogole.com and googel.com all resolve to 64.233.161.104 which is owned by Google.
 
 
+## Country Code Database
 
-Country Code Database
-----------------------
-http://en.wikipedia.org/wiki/Top-level_domain
-http://en.wikipedia.org/wiki/Country_code_top-level_domain
+- http://en.wikipedia.org/wiki/Top-level_domain
+- http://en.wikipedia.org/wiki/Country_code_top-level_domain
+
 2nd level domains here:
-http://www.iana.org/domains/root/db/
+- http://www.iana.org/domains/root/db/
 
 
-See Also
----------
-http://en.wikipedia.org/wiki/Wikipedia:AutoWikiBrowser/Typos
-http://en.wikipedia.org/wiki/Wikipedia:Typo
-http://en.wikipedia.org/wiki/Typosquatting
+## See Also
+
+- http://en.wikipedia.org/wiki/Wikipedia:AutoWikiBrowser/Typos
+- http://en.wikipedia.org/wiki/Wikipedia:Typo
+- http://en.wikipedia.org/wiki/Typosquatting
 
 Strider is tool with similar aims and is produced by Microsoft http://research.microsoft.com/csm/strider/
 
 
-Installation
--------------
-UrlCrazy requires ruby. If you are using Ubuntu or Debian try:
-	$ sudo apt-get install ruby.
+## Installation
+
+URLCrazy requires ruby. If you are using Ubuntu or Debian try:
+`sudo apt install ruby.`
 
 
+## Authors and Acknowledgement
 
-Credits
---------
-Authored by Andrew Horton (urbanadventurer). Andrew is a security consultant for Stratsec.net
-Thanks to Ruby on Rails for Inflector which allows plural and singular permutations.
-Thanks to Wikipedia for the set of common misspellings, homophones, and homoglyphs.
-Thanks to software77.net for their IP to country database
+- Authored by Andrew Horton (urbanadventurer).
+- Thanks to Ruby on Rails for Inflector which allows plural and singular permutations.
+- Thanks to Wikipedia for the set of common misspellings, homophones, and homoglyphs.
+- Thanks to software77.net for their IP to country database
+
+## License
+
+Copyright Andrew Horton, 2012-2020. You have permission to use and distribute this software. You do not have permission to distribute modified versions without permission. You do not have permission to use this as part of a commercial service unless it forms part of a penetration testing service. For example a commercial service that provides domain protection for clients must obtain a license first. Email me if you require a license.
 
