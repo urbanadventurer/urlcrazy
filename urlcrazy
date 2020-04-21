@@ -1,9 +1,15 @@
 #!/usr/bin/env ruby
 #
 # URLCrazy
-# (C) Andrew Horton
+# Copyright Andrew Horton
 #
+# rm country-ips.dat
+# wget 'http://software77.net/geo-ip/?DL=1' -O IpToCountry.csv.gz
+# gzip -d IpToCountry.csv.gz
+# wget 'http://software77.net/geo-ip/?DL=6' -O country-codes.txt
 #
+#License: Copyright Andrew Horton, 2012. You have permission to use and distribute this software. You do not have permission to distribute modified versions without permission. You do not have permission to use this as part of a commercial service unless it forms part of a penetration testing service. For example a commercial service that provides domain protection for clients must obtain a license first. Email me if you require a license.
+
 require 'rubygems'
 require 'getoptlong'
 require 'singleton'
@@ -12,6 +18,9 @@ require 'socket'
 require 'net/http'
 require 'resolv'
 require 'resolv-replace'
+require 'csv'
+require 'json'
+require 'colorize'
 
 # add the directory of the file currently being executed to the load path
 $LOAD_PATH.unshift(File.expand_path(File.dirname(__FILE__))) unless
@@ -27,463 +36,570 @@ require 'inflector.rb'
 require 'tld.rb'
 require 'common-misspellings.rb'
 require 'homophones.rb'
+require 'country.rb'
+require 'output.rb'
 
-$VERSION="0.5"
+$VERSION="0.6"
+DNS_SERVERS = %w| 8.8.8.8 8.8.4.4 64.6.64.6 64.6.65.6 209.244.0.3 209.244.0.4 |
 
 class Keyboard
-	def initialize(layout)
-		case layout
-			when "qwerty" then @rows=["1234567890-","qwertyuiop","asdfghjkl","zxcvbnm"]
-			# france, belgium
-			when "azerty" then @rows=["1234567890-","azertyuiop","qsdfghjklm","wxcvbn"]
-			# germany, austria, switzerland, hungary
-		 	when "qwertz" then @rows=["1234567890-","qwertzuiop","asdfghjkl","yxcvbnm"]
-			# dvorak			
-			when "dvorak" then @rows=["1234567890-","pyfgcrl","aoeuidhtns","qjkxbmwvz"]
-			else raise("Unknown keyboard: #{layout}")
-		end		
-	end
-	
-	def key_left(char)
-		r=row(char)
-		return nil if r.nil?
-		return nil if r.index(char).nil?
-		return nil if r.index(char)==0  # already far left		
-		r[r.index(char)-1].nil? ? nil : "%c" % r[r.index(char)-1]		
-	end
-	
-	def key_right(char)
-		r=row(char)
-		return nil if r.nil?
-		return nil if r.index(char).nil?
-		return nil if r.index(char)==r.length-1  # already far right
-		r[r.index(char)+1].nil? ? nil : "%c" % r[r.index(char)+1]
-	end
-	
-	def row(char)
-		#returns keyboard. eg. qwertyuiop  or nil if not found
-		r=@rows.map {|k| k if k.include?(char) }.join
-		r.empty? ? nil : r
-	end
+    def initialize(layout)
+        case layout
+            when "qwerty" then @rows=["1234567890-","qwertyuiop","asdfghjkl","zxcvbnm"]
+            # france, belgium
+            when "azerty" then @rows=["1234567890-","azertyuiop","qsdfghjklm","wxcvbn"]
+            # germany, austria, switzerland, hungary
+            when "qwertz" then @rows=["1234567890-","qwertzuiop","asdfghjkl","yxcvbnm"]
+            # dvorak            
+            when "dvorak" then @rows=["1234567890-","pyfgcrl","aoeuidhtns","qjkxbmwvz"]
+            else raise("Unknown keyboard: #{layout}")
+        end     
+    end
+    
+    def key_left(char)
+        r=row(char)
+        return nil if r.nil?
+        return nil if r.index(char).nil?
+        return nil if r.index(char)==0  # already far left      
+        r[r.index(char)-1].nil? ? nil : "%c" % r[r.index(char)-1]       
+    end
+    
+    def key_right(char)
+        r=row(char)
+        return nil if r.nil?
+        return nil if r.index(char).nil?
+        return nil if r.index(char)==r.length-1  # already far right
+        r[r.index(char)+1].nil? ? nil : "%c" % r[r.index(char)+1]
+    end
+    
+    def row(char)
+        #returns keyboard. eg. qwertyuiop  or nil if not found
+        r=@rows.map {|k| k if k.include?(char) }.join
+        r.empty? ? nil : r
+    end
 end
 
 
 
 class Typo
-attr_accessor :type, :name, :valid_name, :tld, :extension, :registered_name, :popularity, :resolved_a, :resolved_mx
-	
-	def get_resolved
-		@resolved_a=""
-		@resolved_mx=""
-		return if !@valid_name
+attr_accessor :type, :name, :valid_name, :tld, :extension, :registered_name, :popularity, :resolved_a, :resolved_mx, :resolved_ns, :country_a
+    
+    def get_resolved
+        @resolved_a=""
+        @resolved_mx=""
+        @resolved_ns=""
+        return if !@valid_name
 
-		begin
-			@resolved_a=IPSocket.getaddress(@name)
-			rescue
-		end
-		begin
-			dns=Resolv::DNS.new
-			@resolved_mx=dns.getresources(@name,Resolv::DNS::Resource::IN::MX).first.exchange.to_s
-			rescue
-		end
-	end
+        resolver = Resolv::DNS.new( :nameserver => DNS_SERVERS)
+        resolver.timeouts = [ 3, 15, 30 ]
 
-	
-	def get_popularity
-		# Google confuses dots for commas and spaces
-	
-		return "" if !@valid_name
-		begin
-			http = Net::HTTP.new("www.google.com");
-			req=Net::HTTP::Get.new("/search?q=%22#{@name}%22",{"User-Agent" =>"Opera/9.20 (Windows NT 6.0; U; en)"})
-			res=http.request(req)
-			resp=res.body
-			r=resp.scan(/About ([\d,]+)/).flatten.first.delete(",").to_i		
-		rescue
-			return 0
-		rescue Timeout::Error
-			puts "# Timeout for #{@name}. Retrying"
-			retry
-		end
-		return @popularity=r
-	end
+        begin
+              @resolved_a = resolver.getaddress(@name).to_s
+
+              if @resolved_a
+                @country_a = Countrylookup.ip2cc(@resolved_a)
+              end
+        rescue 
+        #   puts "# Resolve failure for #{@name}. #{err}"
+        end
+
+        begin           
+            @resolved_mx=resolver.getresources(@name,Resolv::DNS::Resource::IN::MX).first.exchange.to_s
+        rescue
+            #puts "# Resolve failure for #{@name}. Retrying."
+        end
+
+
+        begin           
+            @resolved_ns=resolver.getresources(@name,Resolv::DNS::Resource::IN::NS).first.name.to_s
+        rescue
+            #puts "# Resolve failure for #{@name}. Retrying."
+        end
+
+    end
+
+    
+    def get_popularity
+        # Google confuses dots for commas and spaces
+    
+        return "" if !@valid_name
+        begin
+            http = Net::HTTP.new("www.google.com");
+            req=Net::HTTP::Get.new("/search?q=%22#{@name}%22",{"User-Agent" =>"Opera/9.20 (Windows NT 6.0; U; en)"})
+            res=http.request(req)
+            resp=res.body
+            r=resp.scan(/About ([\d,]+)/).flatten.first.delete(",").to_i        
+        rescue
+            return 0
+        rescue Timeout::Error
+            puts "# Timeout for #{@name}. Retrying"
+            retry
+        end
+        return @popularity=r
+    end
 end
 
 
 class Domainname
-	attr_accessor :domain, :registered_name, :tld, :extension,:valid, :typos
-	
-	def initialize(s)
-		@domain=s
-		@registered_name=TLD.registered_name(@domain)
-		@tld=TLD.tld(@domain)
-		@extension=TLD.extension(@domain)
-		@valid=TLD.valid_domain?(@domain)
-		@typos=Array.new
-	end
-	
-	def create_typos
-		self.character_omission.sort.uniq.each {|c|
-			t=Typo.new
-			t.type ="Character Omission"
-			t.name=c
-			@typos<< t
-		}
+    attr_accessor :domain, :registered_name, :tld, :extension,:valid, :typos
+    
+    def initialize(s)
+        @domain=s
+        @registered_name=TLD.registered_name(@domain)
+        @tld=TLD.tld(@domain)
+        @extension=TLD.extension(@domain)
+        @valid=TLD.valid_domain?(@domain)
+        @typos=Array.new
+    end
+    
+    def create_typos
 
-		self.character_repeat.sort.uniq.each {|c|
-			t=Typo.new
-			t.type ="Character Repeat"
-			t.name=c
-			@typos<< t
-		}
-		
-		self.character_swap.sort.uniq.each {|c|
-			t=Typo.new
-			t.type ="Character Swap"
-			t.name=c
-			@typos<< t
-		}
-		self.character_replacement.sort.uniq.each {|c|
-			t=Typo.new
-			t.type ="Character Replacement"
-			t.name=c
-			@typos<< t
-		}
-		self.double_character_replacement.sort.uniq.each {|c|
-			t=Typo.new
-			t.type ="Double Character Replacement"
-			t.name=c
-			@typos<< t
-		}
-		self.character_insertion.sort.uniq.each {|c|
-			t=Typo.new
-			t.type ="Character Insertion"
-			t.name=c
-			@typos<< t
-		}
-	
-		self.missingdot.sort.uniq.each {|c|
-			t=Typo.new
-			t.type ="Missing Dot"
-			t.name=c
-			@typos<< t
-		}
-		
-		self.stripdashes.sort.uniq.each {|c|
-			t=Typo.new
-			t.type ="Strip Dashes"
-			t.name=c
-			@typos<< t
-		}
-	
-		self.singular_or_pluralise.sort.uniq.each {|c|
-			t=Typo.new
-			t.type ="Singular or Pluralise"
-			t.name=c
-			@typos<< t
-		} 
+        self.original.sort.uniq.each {|c|
+            t=Typo.new
+            t.type ="Original"
+            t.name=c
+            @typos<< t
+        }
 
-		self.common_misspellings.sort.uniq.each {|c|
-			t=Typo.new
-			t.type ="Common Misspelling"
-			t.name=c
-			@typos<< t
-		} 
+        self.character_omission.sort.uniq.each {|c|
+            t=Typo.new
+            t.type ="Character Omission"
+            t.name=c
+            @typos<< t
+        }
 
-		self.vowel_swap.sort.uniq.each {|c|
-			t=Typo.new
-			t.type ="Vowel Swap"
-			t.name=c
-			@typos<< t
-		} 
+        self.character_repeat.sort.uniq.each {|c|
+            t=Typo.new
+            t.type ="Character Repeat"
+            t.name=c
+            @typos<< t
+        }
+        
+        self.character_swap.sort.uniq.each {|c|
+            t=Typo.new
+            t.type ="Character Swap"
+            t.name=c
+            @typos<< t
+        }
+        self.character_replacement.sort.uniq.each {|c|
+            t=Typo.new
+            t.type ="Character Replacement"
+            t.name=c
+            @typos<< t
+        }
+        self.double_character_replacement.sort.uniq.each {|c|
+            t=Typo.new
+            t.type ="Double Replacement"
+            t.name=c
+            @typos<< t
+        }
+        self.character_insertion.sort.uniq.each {|c|
+            t=Typo.new
+            t.type ="Character Insertion"
+            t.name=c
+            @typos<< t
+        }
+    
+        self.missingdot.sort.uniq.each {|c|
+            t=Typo.new
+            t.type ="Missing Dot"
+            t.name=c
+            @typos<< t
+        }
+        
+        self.stripdashes.sort.uniq.each {|c|
+            t=Typo.new
+            t.type ="Strip Dashes"
+            t.name=c
+            @typos<< t
+        }
+    
+        self.singular_or_pluralise.sort.uniq.each {|c|
+            t=Typo.new
+            t.type ="Singular or Pluralise"
+            t.name=c
+            @typos<< t
+        } 
 
-		self.homophones.sort.uniq.each {|c|
-			t=Typo.new
-			t.type ="Homophones"
-			t.name=c
-			@typos<< t
-		} 
-			
-		self.bit_flipping.sort.uniq.each {|c|
-			t=Typo.new
-			t.type ="Bit Flipping"
-			t.name=c
-			@typos<< t
-		} 
+        self.common_misspellings.sort.uniq.each {|c|
+            t=Typo.new
+            t.type ="Common Misspelling"
+            t.name=c
+            @typos<< t
+        } 
+
+        self.vowel_swap.sort.uniq.each {|c|
+            t=Typo.new
+            t.type ="Vowel Swap"
+            t.name=c
+            @typos<< t
+        } 
+
+        self.homophones.sort.uniq.each {|c|
+            t=Typo.new
+            t.type ="Homophones"
+            t.name=c
+            @typos<< t
+        } 
+            
+        self.bit_flipping.sort.uniq.each {|c|
+            t=Typo.new
+            t.type ="Bit Flipping"
+            t.name=c
+            @typos<< t
+        } 
 
 unless RUBY_VERSION =~ /^1.8/
-		self.homoglyphs.sort.uniq.each {|c|
-			t=Typo.new
-			t.type ="Homoglyphs"
-			t.name=c
-			@typos<< t
-		} 
+        self.homoglyphs.sort.uniq.each {|c|
+            t=Typo.new
+            t.type ="Homoglyphs"
+            t.name=c
+            @typos<< t
+        } 
 end
 
-		self.wrong_tld.sort.uniq.each {|c|
-			t=Typo.new
-			t.type ="Wrong TLD"
-			t.name=c
-			@typos<< t
-		} 
+        self.wrong_tld.sort.uniq.each {|c|
+            t=Typo.new
+            t.type ="Wrong TLD"
+            t.name=c
+            @typos<< t
+        } 
 
-		self.wrong_sld.sort.uniq.each {|c|
-			t=Typo.new
-			t.type ="Wrong SLD"
-			t.name=c
-			@typos<< t
-		} 
+        self.wrong_sld.sort.uniq.each {|c|
+            t=Typo.new
+            t.type ="Wrong SLD"
+            t.name=c
+            @typos<< t
+        } 
 
-		
-		# remove duplicate names
-		found=Hash.new(0);
-		@typos= @typos.select {|x| x if 1==found[x.name]+=1; }
-		# remove actual name
-		@typos.delete_if {|x| x.name == self.domain }
-		
-		@typos.each {|t|
-			t.valid_name = TLD.valid_domain?(t.name)
-			t.tld = TLD.tld(t.name)
-			t.registered_name = TLD.registered_name(t.name)
-			t.extension = TLD.extension(t.name)
-		}
-	end
-	
-	
-	def character_omission
-		(0..@domain.length-2).map {|i|	@domain[0..i].to_s + @domain[i+2..@domain.length] }
-	end
-	
-	def character_swap
-		(0..@domain.length-2).map {|i|
-			d=@domain.split(//) #split string to chars
-			d[i],d[i+1]=d[i+1],d[i] # swap array elements
-			d.join #
-		}
-	end
-	
-	def character_replacement
-		kb=$keyboard
-		list=Array.new
+        
+        # remove duplicate names
+        found=Hash.new(0);
+        @typos= @typos.select {|x| x if 1==found[x.name]+=1; }
+        
+        # remove actual name unless it's the original
+        @typos.delete_if {|x| x.name == self.domain and x.type != "Original" }
+        
+        @typos.each {|t|
+            t.valid_name = TLD.valid_domain?(t.name)
+            t.tld = TLD.tld(t.name)
+            t.registered_name = TLD.registered_name(t.name)
+            t.extension = TLD.extension(t.name)
+        }
+    end
+    
+    def original
+        [@domain]
+    end
+    
+    def character_omission
+        (0..@domain.length-2).map {|i|  @domain[0..i].to_s + @domain[i+2..@domain.length] }
+    end
+    
+    def character_swap
+        (0..@domain.length-2).map {|i|
+            d=@domain.split(//) #split string to chars
+            d[i],d[i+1]=d[i+1],d[i] # swap array elements
+            d.join #
+        }
+    end
+    
+    def character_replacement
+        kb=$keyboard
+        list=Array.new
 
-		(0..@domain.length-1).each {|i|		
-			keyleft=kb.key_left(@domain[i..i])
-			if !keyleft.nil?
-				x=@domain.dup
-				x[i]=keyleft
-				list << x			
-			end
-		
-			keyright=kb.key_right(@domain[i..i])
-			if !keyright.nil?
-				x=@domain.dup
-				x[i]=keyright
-				list << x
-			end
-		}
-		list
-	end
-	
-	def double_character_replacement
-		kb=$keyboard
-		list=Array.new
+        (0..@domain.length-1).each {|i|     
+            keyleft=kb.key_left(@domain[i..i])
+            if !keyleft.nil?
+                x=@domain.dup
+                x[i]=keyleft
+                list << x           
+            end
+        
+            keyright=kb.key_right(@domain[i..i])
+            if !keyright.nil?
+                x=@domain.dup
+                x[i]=keyright
+                list << x
+            end
+        }
+        list
+    end
+    
+    def double_character_replacement
+        kb=$keyboard
+        list=Array.new
 
-		(0..@domain.length-1).each {|i|
-			if @domain[i..i] == @domain[i+1..i+1]
-				keyleft=kb.key_left(@domain[i..i])
-				if !keyleft.nil?
-					x=@domain.dup
-					x[i]=keyleft
-					x[i+1]=keyleft
-					list << x			
-				end
-		
-				keyright=kb.key_right(@domain[i..i])
-				if !keyright.nil?
-					x=@domain.dup
-					x[i]=keyright
-					x[i+1]=keyright
-					list << x
-				end
-				next
-			end			
-		}
-		list
-	end
-
-
-
-	def character_insertion
-		kb=$keyboard
-		list=Array.new
-		(0..@domain.length-1).each {|i|
-			keyleft=kb.key_left(@domain[i..i])
-			if !keyleft.nil?
-				list << @domain[0..i] + keyleft + @domain[i+1..-1]
-			
-			end
-		
-			list << @domain[0..i] + @domain[i..i] + @domain[i+1..-1]
-		
-			keyright=kb.key_right(@domain[i..i])
-			if !keyright.nil?
-				list << @domain[0..i] + keyright + @domain[i+1..-1]
-			end
-		}
-		list
-	end
-	
-	
-	
-	def missingdot
-		list=Array.new
-		# first add www to the domain like wwwyahoo.com
-		list << "www"+@domain
-		dotindex=0
-		while dotindex=@domain.index(".",dotindex+1) do
-			domain_array=@domain.split(//)
-			domain_array.delete_at(dotindex)
-			list << domain_array.join
-		end
-		# if a domain doesn't have an extension, add .com like a webbrowser does
-		list.each {|d| d << ".com" if !d.include?(".") }
-	end
-	
-	
-	def stripdashes
-		[@domain.delete("-")]
-	end
-	
-	
-	def singular_or_pluralise
-		list= Array.new
-		list << ActiveSupport::Inflector.singularize(@registered_name)+"."+@extension.to_s
-		list << ActiveSupport::Inflector.pluralize(@registered_name)+"."+@extension.to_s
-		list.delete(@domain)
-		list
-	end
-	
-	def character_repeat	
-		(0..@domain.size-1).map {|x| @domain[0..x] + @domain[x].chr + @domain[x+1..-1] }
-	end
+        (0..@domain.length-1).each {|i|
+            if @domain[i..i] == @domain[i+1..i+1]
+                keyleft=kb.key_left(@domain[i..i])
+                if !keyleft.nil?
+                    x=@domain.dup
+                    x[i]=keyleft
+                    x[i+1]=keyleft
+                    list << x           
+                end
+        
+                keyright=kb.key_right(@domain[i..i])
+                if !keyright.nil?
+                    x=@domain.dup
+                    x[i]=keyright
+                    x[i+1]=keyright
+                    list << x
+                end
+                next
+            end         
+        }
+        list
+    end
 
 
-	# unused
-	def popular_sld
-		reg_name = TLD.registered_name(@domain)
-		common_tlds = %w|co.uk com.au co.za |
-		common_tlds.map {|tld| [reg_name,tld].join(".") }	
-	end
 
-	def wrong_sld
-		if TLD.valid_sld?(@domain)
-			reg_name = TLD.registered_name(@domain)
-			TLD.cc(TLD.tld(@domain))['slds'].map {|x| [reg_name,x].join(".") }
-		else
-			[]
-		end
-	end
+    def character_insertion
+        kb=$keyboard
+        list=Array.new
+        (0..@domain.length-1).each {|i|
+            keyleft=kb.key_left(@domain[i..i])
+            if !keyleft.nil?
+                list << @domain[0..i] + keyleft + @domain[i+1..-1]
+            
+            end
+        
+            list << @domain[0..i] + @domain[i..i] + @domain[i+1..-1]
+        
+            keyright=kb.key_right(@domain[i..i])
+            if !keyright.nil?
+                list << @domain[0..i] + keyright + @domain[i+1..-1]
+            end
+        }
+        list
+    end
+    
+    
+    
+    def missingdot
+        list=Array.new
+        # first add www to the domain like wwwyahoo.com
+        list << "www"+@domain
+        dotindex=0
+        while dotindex=@domain.index(".",dotindex+1) do
+            domain_array=@domain.split(//)
+            domain_array.delete_at(dotindex)
+            list << domain_array.join
+        end
+        # if a domain doesn't have an extension, add .com like a webbrowser does
+        list.each {|d| d << ".com" if !d.include?(".") }
+    end
+    
+    
+    def stripdashes
+        [@domain.delete("-")]
+    end
+    
+    
+    def singular_or_pluralise
+        list= Array.new
+        list << ActiveSupport::Inflector.singularize(@registered_name)+"."+@extension.to_s
+        list << ActiveSupport::Inflector.pluralize(@registered_name)+"."+@extension.to_s
+        list.delete(@domain)
+        list
+    end
+    
+    def character_repeat    
+        (0..@domain.size-1).map {|x| @domain[0..x] + @domain[x].chr + @domain[x+1..-1] }
+    end
 
-	def common_misspellings
-		CommonMisspellings.dictionary.keys.select {|x| @domain.include?(x) }.map {|word|	
-			@domain.gsub(word, CommonMisspellings.misspelling(word)) }
-	end
 
-	# swap the vowels, but never the first letter of the word
-	def vowel_swap
-		vowels = %w| a e i o u|
-		word=@domain
-		ord=word[1..-1];
-		(vowels.map {|x| vowels.map {|y| ord.gsub(x,y) }}.flatten.sort.uniq - [word]).map {|x| word.chars.first+x }
-	end
+    # unused
+    def popular_sld
+        reg_name = TLD.registered_name(@domain)
+        common_tlds = %w|co.uk com.au co.za |
+        common_tlds.map {|tld| [reg_name,tld].join(".") }   
+    end
 
-	def homophones
-		Homophones.dictionary.keys.select {|x| @domain.include?(x) }.map {|word|
-			Homophones.dictionary[word].map {|homophoneword| @domain.gsub(word,homophoneword) } }.flatten
-		
-	end
+    def wrong_sld
+        if TLD.valid_sld?(@domain)
+            reg_name = TLD.registered_name(@domain)
+            TLD.cc(TLD.tld(@domain))['slds'].map {|x| [reg_name,x].join(".") }
+        else
+            []
+        end
+    end
 
-	def bit_flipping
-		masks = [128,64,32,16,8,4,2,1]
-		allowed_chars = /[a-zA-Z0-9_\-\.]/
+    def common_misspellings
+        CommonMisspellings.dictionary.keys.select { |x| @domain.include?(x) }.map {|word|   
+            @domain.gsub(word, CommonMisspellings.misspelling(word)) }
+    end
 
-		domains=[]
-		@domain.split(//).each_with_index do |c,i| 
-			flipped = masks.map {|mask| (c[0].ord ^ mask).chr.downcase }.select {|x| x =~ allowed_chars }
-			domains << flipped.map {|x| e=@domain.clone; e[i]=x; e }
-		end
-		domains.flatten!.sort!.uniq!
-		domains
-	end
+    # swap the vowels, but never the first letter of the word
+    def vowel_swap
+        vowels = %w| a e i o u|
+        word=@domain
+        ord=word[1..-1];
+        (vowels.map {|x| vowels.map {|y| ord.gsub(x,y) }}.flatten.sort.uniq - [word]).map {|x| word.chars.first+x }
+    end
 
-	def wrong_tld
+    def homophones
+        Homophones.dictionary.keys.select {|x| @domain.include?(x) }.map {|word|
+            Homophones.dictionary[word].map {|homophoneword| @domain.gsub(word,homophoneword) } }.flatten
+        
+    end
+
+    def bit_flipping
+        masks = [128,64,32,16,8,4,2,1]
+        allowed_chars = /[a-zA-Z0-9_\-\.]/
+
+        domains=[]
+        @domain.split(//).each_with_index do |c,i| 
+            flipped = masks.map {|mask| (c[0].ord ^ mask).chr.downcase }.select {|x| x =~ allowed_chars }
+            domains << flipped.map {|x| e=@domain.clone; e[i]=x; e }
+        end
+        domains.flatten!.sort!.uniq!
+        domains
+    end
+
+    def wrong_tld
 =begin
-.com	Commercial	4,860,000,000
-.org	Noncommercial	1,950,000,000
-.edu	US accredited postsecondary institutions	1,550,000,000
-.gov	United States Government	1,060,000,000
-.uk	United Kingdom	473,000,000
-.net	Network services	206,000,000
-.ca	Canada	165,000,000
-.de	Germany	145,000,000
-.jp	 Japan	139,000,000
-.fr	 France	96,700,000
-.au	Australia	91,000,000
-.us	United States	68,300,000
-.ru	Russian Federation	67,900,000
-.ch	Switzerland	62,100,000
-.it	Italy	55,200,000
-.nl	Netherlands	45,700,000
-.se	Sweden	39,000,000
-.no	Norway	32,300,000
-.es	Spain	31,000,000
+.com    Commercial  4,860,000,000
+.org    Noncommercial   1,950,000,000
+.edu    US accredited postsecondary institutions    1,550,000,000
+.gov    United States Government    1,060,000,000
+.uk United Kingdom  473,000,000
+.net    Network services    206,000,000
+.ca Canada  165,000,000
+.de Germany 145,000,000
+.jp  Japan  139,000,000
+.fr  France 96,700,000
+.au Australia   91,000,000
+.us United States   68,300,000
+.ru Russian Federation  67,900,000
+.ch Switzerland 62,100,000
+.it Italy   55,200,000
+.nl Netherlands 45,700,000
+.se Sweden  39,000,000
+.no Norway  32,300,000
+.es Spain   31,000,000
 =end
-		reg_name = TLD.registered_name(@domain)
-		common_tlds = %w|com org edu uk net ca de jp fr au us ru ch it nl se no es|
-		common_tlds.map {|tld| [reg_name,tld].join(".") }	
-	end
+        reg_name = TLD.registered_name(@domain)
+        common_tlds = %w|com org edu uk net ca de jp fr au us ru ch it nl se no es|
+        common_tlds.map {|tld| [reg_name,tld].join(".") }   
+    end
 
-	
-	def replace_permutations(string,pattern,replacement)
-		permutations=[]
-		# how many times does pattern appear? it is n
-		n = string.scan(pattern).size
-		# generate perumations map for n times
-		map = [pattern,replacement].repeated_permutation(n).map
+    
+    def replace_permutations(string,pattern,replacement)
+        permutations=[]
+        # how many times does pattern appear? it is n
+        n = string.scan(pattern).size
+        # generate perumations map for n times
+        map = [pattern,replacement].repeated_permutation(n).map
 
-		occurances = string.match(pattern)
-		# for each occurance of pattern, replace using the map
-		map.each do |mapset| 
-			#puts mapset.inspect
-			strsplit = string.split(pattern)
-			mapset.each_with_index do |thisreplacement,i|
-				#puts [i,thisreplacement].inspect
-				strsplit[i] = strsplit[i] + thisreplacement
-			end
-			permutations << strsplit.join
-		end
-		permutations.flatten.sort.uniq - [string]
-	end
+        occurances = string.match(pattern)
+        # for each occurance of pattern, replace using the map
+        map.each do |mapset| 
+            #puts mapset.inspect
+            strsplit = string.split(pattern)
+            mapset.each_with_index do |thisreplacement,i|
+                #puts [i,thisreplacement].inspect
+                strsplit[i] = strsplit[i] + thisreplacement
+            end
+            permutations << strsplit.join
+        end
+        permutations.flatten.sort.uniq - [string]
+    end
 
 
-	def homoglyphs
-		#https://en.wikipedia.org/wiki/Homoglyph
-		homoglyphs = {"0"=>"o", "1"=>"l", "l"=> "i", "rn" => "m", "cl"=>"d", "vv"=>"w" }
-		all_homoglyphs = homoglyphs.merge(homoglyphs.invert)
-		list=[]
-		all_homoglyphs.each_pair {|x,y|
-			list << replace_permutations(@domain,x,y)
-		}
-		list.flatten.sort.uniq
-	end
+    def homoglyphs
+        #https://en.wikipedia.org/wiki/Homoglyph
+        homoglyphs = {"0"=>"o", "1"=>"l", "l"=> "i", "rn" => "m", "cl"=>"d", "vv"=>"w" }
+        all_homoglyphs = homoglyphs.merge(homoglyphs.invert)
+        list=[]
+        all_homoglyphs.each_pair {|x,y|
+            list << replace_permutations(@domain,x,y)
+        }
+        list.flatten.sort.uniq
+    end
 
 end
+
+
+def banner
+# thanks http://www.patorjk.com/software/taag/#p=testall&h=2&v=1&f=Graffiti&t=URLCrazy
+
+asciiart = []
+
+asciiart << '
+ ____ _____________.____   _________                             
+|    |   \______   \    |  \_   ___ \___________  ___________.__.
+|    |   /|       _/    |  /    \  \|_  __ \__  \ \___   <   |  |
+|    |  / |    |   \    |__\     \___|  | \// __ \_/    / \___  |
+|______/  |____|_  /_______ \______  /__|  (____  /_____ \/ ____|
+                 \/        \/      \/           \/      \/\/     
+
+'
+
+asciiart << '
+ █    ██  ██▀███   ██▓    ▄████▄  ██▀███  ▄▄▄     ▒███████▒▓██   ██▓
+ ██  ▓██▒▓██ ▒ ██▒▓██▒   ▒██▀ ▀█ ▓██ ▒ ██▒████▄   ▒ ▒ ▒ ▄▀░ ▒██  ██▒
+▓██  ▒██░▓██ ░▄█ ▒▒██░   ▒▓█    ▄▓██ ░▄█ ▒██  ▀█▄ ░ ▒ ▄▀▒░   ▒██ ██░
+▓▓█  ░██░▒██▀▀█▄  ▒██░   ▒▓▓▄ ▄██▒██▀▀█▄ ░██▄▄▄▄██  ▄▀▒   ░  ░ ▐██▓░
+▒▒█████▓ ░██▓ ▒██▒░██████▒ ▓███▀ ░██▓ ▒██▒▓█   ▓██▒███████▒  ░ ██▒▓░
+░▒▓▒ ▒ ▒ ░ ▒▓ ░▒▓░░ ▒░▓  ░ ░▒ ▒  ░ ▒▓ ░▒▓░▒▒   ▓▒█░▒▒ ▓░▒░▒   ██▒▒▒ 
+░░▒░ ░ ░   ░▒ ░ ▒░░ ░ ▒  ░ ░  ▒    ░▒ ░ ▒░ ▒   ▒▒ ░░▒ ▒ ░ ▒ ▓██ ░▒░ 
+ ░░░ ░ ░   ░░   ░   ░ ░  ░         ░░   ░  ░   ▒  ░ ░ ░ ░ ░ ▒ ▒ ░░  
+   ░        ░         ░  ░ ░        ░          ░  ░ ░ ░     ░ ░     
+                         ░                        ░         ░ ░     
+
+'
+
+asciiart << "
+db    db d8888b. db       .o88b. d8888b.  .d8b.  d88888D db    db 
+88    88 88  `8D 88      d8P  Y8 88  `8D d8' `8b YP  d8' `8b  d8' 
+88    88 88oobY' 88      8P      88oobY' 88ooo88    d8'   `8bd8'  
+88    88 88`8b   88      8b      88`8b   88~~~88   d8'      88    
+88b  d88 88 `88. 88booo. Y8b  d8 88 `88. 88   88  d8' db    88    
+~Y8888P' 88   YD Y88888P  `Y88P' 88   YD YP   YP d88888P    YP    
+                                                                  
+"
+
+asciiart << '
+ _______ ______ _____   ______                         
+|   |   |   __ \     |_|      |.----.---.-.-----.--.--.
+|   |   |      <       |   ---||   _|  _  |-- __|  |  |
+|_______|___|__|_______|______||__| |___._|_____|___  |
+                                                |_____|
+
+'
+
+=begin
+asciiart << '
+  :                                    .,                                                            
+  Ef      j.                    i     ,Wt j.                                                         
+  E#t     EW,                  LE    i#D. EW,                   ..                        f.     ;WE.
+  E#t     E##j                L#E   f#f   E##j                 ;W,      ,##############Wf.E#,   i#G  
+  E#t     E###D.             G#W. .D#i    E###D.              j##,       ........jW##Wt   E#t  f#f   
+  E#t fi  E#jG#W;           D#K. :KW,     E#jG#W;            G###,             tW##Kt     E#t G#i    
+  E#t L#j E#t t##f         E#K.  t#f      E#t t##f         :E####,           tW##E;       E#jEW,     
+  E#t L#L E#t  :K#E:     .E#E.    ;#G     E#t  :K#E:      ;W#DG##,         tW##E;         E##E.      
+  E#tf#E: E#KDDDD###i   .K#E       :KE.   E#KDDDD###i    j###DW##,      .fW##D,           E#G        
+  E###f   E#f,t#Wi,,,  .K#D         .DW:  E#f,t#Wi,,,   G##i,,G##,    .f###D,             E#t        
+  E#K,    E#t  ;#W:   .W#G            L#, E#t  ;#W:   :K#K:   L##,  .f####Gfffffffffff;   E#t        
+  EL      DWi   ,KK: :W##########Wt    jt DWi   ,KK: ;##D.    L##, .fLLLLLLLLLLLLLLLLLi   EE.        
+  :                  :,,,,,,,,,,,,,.                 ,,,      .,,                         t          
+                                                                                                     
+'
+=end
+
+asciiart[ rand(asciiart.size) ]
+end
+
 
 
 def usage 
-print "URLCrazy version #{$VERSION}
-by Andrew Horton (urbanadventurer)
-http://www.morningstarsecurity.com/research/urlcrazy
+random_colour = [:red, :green, :blue, :yellow, :magenta, :cyan ][ rand(6) ]
+print_output banner.colorize( random_colour )
+
+print "URLCrazy version #{$VERSION} by Andrew Horton (urbanadventurer)
+Visit http://www.morningstarsecurity.com/research/urlcrazy
 
 Generate and test domain typos and variations to detect and perform typo squatting, URL hijacking,
 phishing, and corporate espionage.
@@ -497,38 +613,39 @@ domain, and wrong second level domain.
 Usage: #{$0} [options] domain
 
 Options
- -k, --keyboard=LAYOUT	Options are: qwerty, azerty, qwertz, dvorak (default: qwerty)
- -p, --popularity	Check domain popularity with Google
- -r, --no-resolve	Do not resolve DNS
- -i, --show-invalid	Show invalid domain names
- -f, --format=TYPE	Human readable or CSV (default: human readable)
- -o, --output=FILE	Output file
- -h, --help		This help
- -v, --version   	Print version information. This version is #{$VERSION}
+ -k, --keyboard=LAYOUT  Options are: qwerty, azerty, qwertz, dvorak (default: qwerty)
+ -p, --popularity       Check domain popularity with Google
+ -r, --no-resolve       Do not resolve DNS
+ -i, --show-invalid     Show invalid domain names
+ -f, --format=TYPE      Human readable or CSV (default: human readable)
+ -o, --output=FILE      Output file
+ -n, --nocolor          Disable colour
+ -h, --help             This help
+ -v, --version          Print version information. This version is #{$VERSION}
 
 "
-# -R, --only-resolve	Show only domain names that DNS resolve
+# -R, --only-resolve    Show only domain names that DNS resolve
 if RUBY_VERSION.to_f < 1.9
-	puts "Warning: You are using a Ruby version below 1.9. Some features are not available.\n\n"
+    puts "Warning: You are using a Ruby version below 1.9. Some features are not available.\n\n"
 end
 
 end
 
 # send output to the screen, file, or both
 def puts_output(*s)
-	unless s.empty?
-		$output_filep.puts s.first if $output_filep
-		puts s.first
-	else
-		# as puts with no arguments
-		$output_filep.puts if $output_filep
-		puts
-	end
+    unless s.empty?
+        $output_filep.puts s.first if $output_filep
+        puts s.first
+    else
+        # as puts with no arguments
+        $output_filep.puts if $output_filep
+        puts
+    end
 end
 
 def print_output(s)
-	$output_filep.print s if $output_filep
-	print s
+    $output_filep.print s if $output_filep
+    print s
 end
 
 
@@ -552,6 +669,7 @@ output_type="human"
       [ '--output','-o', GetoptLong::REQUIRED_ARGUMENT ],
       [ '--format','-f', GetoptLong::REQUIRED_ARGUMENT ],
       [ '--only-resolve','-R', GetoptLong::NO_ARGUMENT ],
+      [ '--nocolor','-n', GetoptLong::NO_ARGUMENT ],
       [ '-v','--version', GetoptLong::NO_ARGUMENT ]
     )
 
@@ -563,41 +681,44 @@ begin
                 exit
         when '--keyboard','-k'
                 if ['qwerty','qwertz','dvorak','azerty'].include? arg.downcase
-			keyboard_layout=arg.downcase
-		else
-			puts "Error: Unknown keyboard layout: #{arg}"
-			exit
-		end
+            keyboard_layout=arg.downcase
+        else
+            puts "Error: Unknown keyboard layout: #{arg}"
+            exit
+        end
         when '--no-resolve','-r'
                 resolve_domains=false
-  	when '--show-invalid','-i'
+    when '--show-invalid','-i'
                 show_invalid=true
-  	when '--only-resolve','-R'
+    when '--only-resolve','-R'
                 show_only_resolve=true  
         when '--popularity','-p'
                 check_popularity=true 
         when '--format','-f'
                 output_type=arg.downcase
-		unless ["human","csv"].include?(output_type)
-			puts "Invalid output type"
-			exit 1
-		end
+        unless ["human","csv","json"].include?(output_type)
+            puts "Invalid output type"
+            exit 1
+        end
         when '--output','-o'
                 output_filename=arg
-		begin
-			$output_filep = File.new(output_filename,"w")			
-		rescue
-			puts "Cannot write to output file, #{output_filename}"
-			exit 1
-		end
+                String.disable_colorization = true
+        when '--nocolor','-n'
+                String.disable_colorization = true
+        begin
+            $output_filep = File.new(output_filename,"w")           
+        rescue
+            puts "Cannot write to output file, #{output_filename}"
+            exit 1
+        end
         when '-V','--version'
                 puts $VERSION; exit
     end
  end
 rescue
-	puts
-	usage
-	exit
+    puts
+    usage
+    exit
 end
 
 if ARGV.length < 1
@@ -607,94 +728,49 @@ end
 
 $keyboard=Keyboard.new(keyboard_layout)
 
-d=Domainname.new(ARGV[0].downcase)
-abort "Aborting. Invalid domainname." unless d.valid == true
+this_domain=Domainname.new(ARGV[0].downcase)
+abort "Aborting. Invalid domainname." unless this_domain.valid == true
 
 abort "Aborting. Cannot show only domains that resolve when not resolving domains." if show_only_resolve and not resolve_domains
 
-if output_type=="human"
-	puts_output "URLCrazy Domain Report"
-	puts_output "Domain".ljust(10) +": #{d.domain}"
-	puts_output "Keyboard".ljust(10) +": #{keyboard_layout}"
-	puts_output "At".ljust(10) +": #{Time.now}"
-	puts_output
+case output_type
+    when "human"
+        output = OutputHuman.new( this_domain, keyboard_layout, check_popularity, resolve_domains, show_invalid )
+    when "csv"
+        output = OutputCSV.new( this_domain, keyboard_layout, check_popularity, resolve_domains, show_invalid )
+    when "json"
+        output = OutputJSON.new( this_domain, keyboard_layout, check_popularity, resolve_domains, show_invalid )
+    else
+        abort "Unknown output type"
 end
 
-d.create_typos
+output.header
 
-# output
-columns=Array.new
-widths=Array.new
+# initiate the country IP address DB
+Countrylookup.startup
 
-headings=["Typo Type","Typo","Valid","Pop","DNS-A","DNS-MX","Extn"]
-(0..headings.size-1).each {|c| columns[c]=Array.new }
+this_domain.create_typos
+
+# make report
 
 # remove invalid hostnames
-if show_invalid==false
-	d.typos = d.typos.select {|x| x if x.valid_name }
+if show_invalid == false
+    this_domain.typos = this_domain.typos.select { |x| x if x.valid_name }
 end
 
-puts_output "# Please wait. #{d.typos.size} hostnames to process" if output_type=="human"
+puts_output output.hostnames_to_process
 
 # resolve popularity faster with threads
 threads=[]
-d.typos.each {|typo|
-	threads << Thread.new(typo) {|thistypo|
-		typo.get_resolved if resolve_domains
-		thistypo.get_popularity if check_popularity
-	}
+this_domain.typos.each {|typo|
+    threads << Thread.new(typo) {|thistypo|
+        typo.get_resolved if resolve_domains
+        thistypo.get_popularity if check_popularity
+    }
 }
 threads.each {|aThread| aThread.join }
 
-# make report
-d.typos.each {|typo|
-		columns[0] << typo.type.to_s
-		columns[1] << typo.name.to_s
-		columns[2] << typo.valid_name.to_s
-		columns[3] << (check_popularity == true ? typo.popularity.to_s : "?")
-		columns[4] << (resolve_domains == true ? typo.resolved_a.to_s : "?" )
-		columns[5] << (resolve_domains == true ? typo.resolved_mx.to_s : "?" )
-		columns[6] << typo.extension.to_s
-}
-
-# trim unneeded columns
-unless show_invalid
-	headings -= ["Valid"] 
-	columns[2] = nil
-end
-unless check_popularity
-	headings -= ["Pop"]
-	columns[3] = nil
-end
-unless resolve_domains
-	headings -= ["DNS-A"] 
-	headings -= ["DNS-MX"]
-	columns[4] =nil
-	columns[5] =nil
-end
-headings.compact!
-columns.compact!
-
-# print report columns
-columns.each_with_index {|column,i|
-	widths[i]=((column.map {|row| row.nil? ? 0 : row.length } << headings[i].length).compact.sort[-1].to_i) + 2
-	print_output headings[i]
-	print_output " " * (widths[i] - headings[i].length) if output_type=="human"
-	print_output "," if output_type=="csv" and i < columns.size-1
-}
-puts_output
-puts_output widths.map {|w| "-" *w}.join if output_type=="human"
-
-# print rows
-columns[0].each_with_index {|row,i|
-	columns.each_with_index {|col,j|
-		print_output columns[j][i]
-		print_output " " * (widths[j]-columns[j][i].length) if output_type=="human"
-		print_output "," if output_type=="csv" and j < columns.size-1
-	}
-	puts_output
-}
-puts_output
+output.table 
 
 $output_filep.close if $output_filep
-
+# 

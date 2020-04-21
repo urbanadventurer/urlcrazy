@@ -1,11 +1,11 @@
 Title:          URLCrazy Readme
-Version:        0.5
+Version:        0.6
 Description:    UrlCrazy is for the study of domainname typos and URL hijacking
-Release Date:   July 2012
 Author:         Andrew Horton (urbanadventurer)
-Homepage:   	www.morningstarsecurity.com/research/urlcrazy
+Homepage:   	https://www.morningstarsecurity.com/research/urlcrazy
+Source:		https://github.com/urbanadventurer/urlcrazy
 Platforms:      Linux, Ruby
-Copying-policy: GPLv2
+License: Copyright Andrew Horton, 2012-2017. You have permission to use and distribute this software. You do not have permission to distribute modified versions without permission. You do not have permission to use this as part of a commercial service unless it forms part of a penetration testing service. For example a commercial service that provides domain protection for clients must obtain a license first. Email me if you require a license.
 
 
 Description
@@ -71,7 +71,7 @@ Bit Flipping.
 Each letter in a domain name is an 8bit character. The character is substituted with the set of valid characters that can be made after a single bit flip. For example, facebook.com becomes bacebook.com, dacebook.com, faaebook.com,fabebook.com,facabook.com, etc.
 
 Homoglyphs.
-Characters that look similar but are different are called homogylphs. An example is that the lower case l looks similar to the numeral one, e.g. l vs 1. For example, google.com becomes goog1e.com.
+One or more characters that look similar to another character but are different are called homogylphs. An example is that the lower case l looks similar to the numeral one, e.g. l vs 1. For example, google.com becomes goog1e.com.
 
 Wrong Top Level Domain.
 For example, www.trademe.co.nz becomes www.trademe.co.nz and www.google.com becomes www.google.org
@@ -81,6 +81,10 @@ Wrong Second Level Domain.
 Uses an alternate, valid second level domain for the top level domain.
 For example, www.trademe.co.nz becomes www.trademe.ac.nz and www.trademe.iwi.nz
 
+
+Tips
+--------------------------
+The output will often be wider than the width of your terminal. If this bothers you, output your report to a file or increase the width of your terminal.
 
 
 Supported Keyboard Layouts
@@ -149,5 +153,6 @@ Credits
 --------
 Authored by Andrew Horton (urbanadventurer). Andrew is a security consultant for Stratsec.net
 Thanks to Ruby on Rails for Inflector which allows plural and singular permutations.
-Thanks to Wikipedia for the set of common misspellings and homophones.
+Thanks to Wikipedia for the set of common misspellings, homophones, and homoglyphs.
+Thanks to software77.net for their IP to country database
 
