@@ -1,7 +1,7 @@
 Title:          URLCrazy Readme
-Version:        0.3
+Version:        0.4
 Description:    UrlCrazy is for the study of domainname typos and URL hijacking
-Release Date:   March 2011
+Release Date:   September 2011
 Author:         Andrew Horton (urbanadventurer)
 Homepage:   	www.morningstarsecurity.com/research/urlcrazy
 Platforms:      Linux, Ruby
@@ -18,8 +18,9 @@ Use Cases:
 	o) Identify typo domain names that will get traffic intended for a more popular domain
 
 Features:
-	o) Generates 10 types of typos
+	o) Generates 13 types of typos
 	o) Knows over 8000 common misspellings
+	o) Supports cosmic ray induced bit flipping
 	o) Multiple keyboard layouts
 	o) Check if a typo is a valid domain
 	o) Test if domain typos are in use
@@ -52,6 +53,18 @@ These typos are created by omitting a dash from the domainname. For example, www
 Singular or Pluralise.
 These typos are created by making a singular domain plural and vice versa. For example, www.google.com becomes www.googles.com and www.games.co.nz becomes www.game.co.nz
 
+Common Misspellings.
+Over 8000 common misspellings from Wikipedia. For example, www.youtube.com becomes www.youtub.com and www.abseil.com becomes www.absail.com
+
+Vowel Swapping.
+Swap vowels within the domain name except for the first letter. For example, www.google.com becomes www.gaagle.com.
+
+Homophones.
+Over 450 sets of words that sound the same when spoken. For example, www.base.com becomes www.bass.com.
+
+Bit Flipping.
+Each letter in a domain name is an 8bit character. The character is substituted with the set of valid characters that can be made after a single bit flip. For example, facebook.com becomes bacebook.com, dacebook.com, faaebook.com,fabebook.com,facabook.com, etc.
+
 Wrong Top Level Domain.
 For example, www.trademe.co.nz becomes www.trademe.co.nz and www.google.com becomes www.google.org
 Uses the 19 most common top level domains.
@@ -60,8 +73,6 @@ Wrong Second Level Domain.
 Uses an alternate, valid second level domain for the top level domain.
 For example, www.trademe.co.nz becomes www.trademe.ac.nz and www.trademe.iwi.nz
 
-Common Misspellings.
-Over 8000 common misspellings from Wikipedia. For example, www.youtube.com becomes www.youtub.com and www.abseil.com becomes www.absail.com
 
 
 Supported Keyboard Layouts
@@ -130,6 +141,5 @@ Credits
 --------
 Authored by Andrew Horton (urbanadventurer). Andrew is a security consultant for Security-Assessment.com
 
-Thanks to Ruby on Rails for Inflector which allowing plural and singular permutations.
-
-
+Thanks to Ruby on Rails for Inflector which allows plural and singular permutations.
+Thanks to Wikipedia for the set of common misspellings and homophones.

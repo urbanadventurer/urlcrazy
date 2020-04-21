@@ -1,9 +1,12 @@
 #!/usr/bin/env ruby
+require 'rubygems'
 require 'getoptlong'
 require 'singleton'
 require 'pp'
 require 'socket'
 require 'net/http'
+require 'resolv'
+require 'resolv-replace'
 
 # add the directory of the file currently being executed to the load path
 $LOAD_PATH.unshift(File.expand_path(File.dirname(__FILE__))) unless
@@ -18,35 +21,18 @@ end
 require 'inflector.rb'
 require 'tld.rb'
 require 'common-misspellings.rb'
+require 'homophones.rb'
 
-$VERSION="0.3"
+$VERSION="0.4"
 
 =begin
-
 
 Read the README file
 
 TO DO:
-[x]use another search engine instead of cuil
-[x]new typo - repeating characters
-[x] remove sld domain column
-[x] make .. invalid
-[x] remove duplicate domain names
-[x] use threads for speed
-[x] option to not show invalid names
-[x] show only unique typos
-[x] support foreign keyboard mapping
-[x] new typo - wrong tld.
-[x] anything to .com,  anything like .org.nz to .co.nz or .org.au to .com.au
-
-
-add multiple output/log formats. make standout output briefer, remove
-invalid domains, remove valid? column, remove 1st column, remove TLD
-column, add reverse resolve
-
-new typo - common misspellings
-vowel swap, phonetic spelling
-
+add multiple output/log formats.
+add reverse resolve
+phonetic spelling
 new typo - subtitution of double/repeated characters. google => giigle
 
 confirm popularity results - -  compare popularity vs. AOL search histories
@@ -63,9 +49,8 @@ cache/	save results in mysql or text files
 
 let ppl register domains from the gui version
 
-* A common misspelling, or foreign language spelling, of the intended site: exemple.com
-phonetic misspelling. OPERATOR vs OPERATAR
-	http://en.wikipedia.org/wiki/Wikipedia:Lists_of_common_misspellings/For_machines
+
+
 	
 	double letter -> single letter, vice versa
 	ili => il
@@ -74,9 +59,6 @@ phonetic misspelling. OPERATOR vs OPERATAR
 	y + > ie
 	ei = > ie
 	
-
-* A different top-level domain: example.org
-.com or .co versions. whitehouse.com instead of whitehouse.gov
 
 maybe use http://whois.rubyforge.org/rdoc/ for whois info
 maybe use maxmind geoip for countries of IPs -- maybe not as useful coz that's just where it's hosted
@@ -89,7 +71,7 @@ shows available domain typos that aren't hijacked -- no whois yet
 focused on finding typos more than discovering sites using typos to serve ads
 discovers more classes of typos
 
-crashes on some short inputs
+
 =end
 
 class Keyboard
@@ -130,17 +112,24 @@ end
 
 
 class Typo
-	attr_accessor :type, :name, :valid_name, :resolved, :tld, :extension, :registered_name, :popularity, :resolved
+attr_accessor :type, :name, :valid_name, :tld, :extension, :registered_name, :popularity, :resolved_a, :resolved_mx
 	
 	def get_resolved
-		return @resolved="" if !@valid_name
+		@resolved_a=""
+		@resolved_mx=""
+		return if !@valid_name
 
 		begin 
-			return @resolved=IPSocket.getaddress(@name)
-		rescue
-			return @resolved=""
+			@resolved_a=IPSocket.getaddress(@name)
+			rescue
+		end
+		begin
+			dns=Resolv::DNS.new
+			@resolved_mx=dns.getresources(@name,Resolv::DNS::Resource::IN::MX).first.exchange.to_s
+			rescue
 		end
 	end
+
 	
 	def get_popularity
 		# cuil.com is good.
@@ -231,6 +220,34 @@ class Domainname
 			@typos<< t
 		} 
 
+		self.common_misspellings.sort.uniq.each {|c|
+			t=Typo.new
+			t.type ="Common Misspelling"
+			t.name=c
+			@typos<< t
+		} 
+
+		self.vowel_swap.sort.uniq.each {|c|
+			t=Typo.new
+			t.type ="Vowel Swap"
+			t.name=c
+			@typos<< t
+		} 
+
+		self.homophones.sort.uniq.each {|c|
+			t=Typo.new
+			t.type ="Homophones"
+			t.name=c
+			@typos<< t
+		} 
+			
+		self.bit_flipping.sort.uniq.each {|c|
+			t=Typo.new
+			t.type ="Bit Flipping"
+			t.name=c
+			@typos<< t
+		} 
+
 		self.wrong_tld.sort.uniq.each {|c|
 			t=Typo.new
 			t.type ="Wrong TLD"
@@ -245,17 +262,12 @@ class Domainname
 			@typos<< t
 		} 
 
-		self.common_misspellings.sort.uniq.each {|c|
-			t=Typo.new
-			t.type ="Common Misspelling"
-			t.name=c
-			@typos<< t
-		} 
-				
+		
 		# remove duplicate names
 		found=Hash.new(0);
 		@typos= @typos.select {|x| x if 1==found[x.name]+=1; }
-
+		# remove actual name
+		@typos.delete_if {|x| x.name == self.domain }
 		
 		@typos.each {|t|
 			t.valid_name = TLD.valid_domain?(t.name)
@@ -355,6 +367,55 @@ class Domainname
 		(0..@domain.size-1).map {|x| @domain[0..x] + @domain[x].chr + @domain[x+1..-1] }
 	end
 
+
+# unused
+	def popular_sld
+		reg_name = TLD.registered_name(@domain)
+		common_tlds = %w|co.uk com.au co.za |
+		common_tlds.map {|tld| [reg_name,tld].join(".") }	
+	end
+
+	def wrong_sld
+		if TLD.valid_sld?(@domain)
+			reg_name = TLD.registered_name(@domain)
+			TLD.cc(TLD.tld(@domain))['slds'].map {|x| [reg_name,x].join(".") }
+		else
+			[]
+		end
+	end
+
+	def common_misspellings
+		CommonMisspellings.dictionary.keys.select {|x| @domain.include?(x) }.map {|word|	
+			@domain.gsub(word, CommonMisspellings.misspelling(word)) }
+	end
+
+	# swap the vowels, but never the first letter of the word
+	def vowel_swap
+		vowels = %w| a e i o u|
+		word=@domain
+		ord=word[1..-1];
+		(vowels.map {|x| vowels.map {|y| ord.gsub(x,y) }}.flatten.sort.uniq - [word]).map {|x| word.chars.first+x }
+	end
+
+	def homophones
+		Homophones.dictionary.keys.select {|x| @domain.include?(x) }.map {|word|
+			Homophones.dictionary[word].map {|homophoneword| @domain.gsub(word,homophoneword) } }.flatten
+		
+	end
+
+	def bit_flipping
+		masks = [128,64,32,16,8,4,2,1]
+		allowed_chars = /[a-zA-Z0-9_\-\.]/
+
+		domains=[]
+		@domain.split(//).each_with_index do |c,i| 
+			flipped = masks.map {|mask| (c[0] ^ mask).chr.downcase }.select {|x| x =~ allowed_chars }
+			domains << flipped.map {|x| e=@domain.clone; e[i]=x; e }
+		end
+		domains.flatten!.sort!.uniq!
+		domains
+	end
+
 	def wrong_tld
 =begin
 .com	Commercial	4,860,000,000
@@ -382,47 +443,28 @@ class Domainname
 		common_tlds.map {|tld| [reg_name,tld].join(".") }	
 	end
 
-	# unused
-	def popular_sld
-		reg_name = TLD.registered_name(@domain)
-		common_tlds = %w|co.uk com.au co.za |
-		common_tlds.map {|tld| [reg_name,tld].join(".") }	
-	end
-
-	def wrong_sld
-		if TLD.valid_sld?(@domain)
-			reg_name = TLD.registered_name(@domain)
-			TLD.cc(TLD.tld(@domain))['slds'].map {|x| [reg_name,x].join(".") }
-		else
-			[]
-		end
-	end
-
-	def common_misspellings
-		CommonMisspellings.dictionary.keys.select {|x| @domain.include?(x) }.map {|word|	
-			@domain.gsub(word, CommonMisspellings.misspelling(word)) }
-	end
+	
 
 end
 
 
 def usage 
 print "Usage: #{$0} [options] domainname
-URLCrazy generates and tests domainname typo permutations to study typo squatting / url hijacking.
+URLCrazy generates and tests domainname typo permutations to study typo squatting / URL hijacking.
 URLCrazy version #{$VERSION} by Andrew Horton (urbanadventurer)
 Homepage: http://www.morningstarsecurity.com/research/urlcrazy
 
 Typo types :
 Character Omission, Character Repeat, Adjacent Character Swap, Adjacent Character Replacement,
-Adjacent Character Insertion, Missing Dot, Strip Dashes, Singular or Pluralise, Wrong Top Level
-Domain, Wrong Second Level Domain, Common Misspellings.
-
+Adjacent Character Insertion, Missing Dot, Strip Dashes, Singular or Pluralise, Common Misspellings, 
+Vowel Swaps, Homophones, Bit Flipping (Cosmic Rays), Wrong Top Level Domain, and Wrong Second Level
+Domain.
 
 Options
- -k, --keyboard=LAYOUT	Options are: qwerty, azerty, qwertz, dvorak
- -p, --no-popularity	Do not check popularity (default : off)
- -r, --no-resolve	Do not resolve domain names (default : off) 
- -i, --show-invalid	Show invalid domain names (default : off)
+ -k, --keyboard=LAYOUT	Options are: qwerty, azerty, qwertz, dvorak (default: qwerty)
+ -p, --no-popularity	Do not check domain popularity
+ -r, --no-resolve	Do not resovle DNS
+ -i, --show-invalid	Show invalid domain names
  -V, --version   	Print version information. This version is #{$VERSION}
 
 "
@@ -498,30 +540,25 @@ d.create_typos
 columns=Array.new
 widths=Array.new
 
-headings=["Typo Type","Typo","Valid","Pop","IP","Extn"]
-(0..5).each {|c| columns[c]=Array.new }
+headings=["Typo Type","Typo","Valid","Pop","DNS-A","DNS-MX","Extn"]
+(0..6).each {|c| columns[c]=Array.new }
 
 # remove invalid hostnames
 if show_invalid==false
 	d.typos = d.typos.select {|x| x if x.valid_name }
 end
 
-puts "# Please wait. Resolving #{d.typos.size} hostnames" if resolve_domains
-# resolve IPs one at a time. It's not thread safe.
-d.typos.each {|typo|
-		typo.get_resolved if resolve_domains == true 
-}
+puts "# Please wait. #{d.typos.size} hostnames to process"
 
-puts "# Please wait. Checking popularity" if resolve_domains
 # resolve popularity faster with threads
 threads=[]
 d.typos.each {|typo|
 	threads << Thread.new(typo) {|thistypo|
+		typo.get_resolved if resolve_domains == true 
 		thistypo.get_popularity if check_popularity == true
 	}
 }
 threads.each {|aThread| aThread.join }
-
 
 # make report
 d.typos.each {|typo|
@@ -529,10 +566,18 @@ d.typos.each {|typo|
 		columns[1] << typo.name.to_s
 		columns[2] << typo.valid_name.to_s
 		columns[3] << (check_popularity == true ? typo.popularity.to_s : "?")
-		columns[4] << (resolve_domains == true ? typo.resolved.to_s : "?" )
-		columns[5] << typo.extension.to_s
+		columns[4] << (resolve_domains == true ? typo.resolved_a.to_s : "?" )
+		columns[5] << (resolve_domains == true ? typo.resolved_mx.to_s : "?" )
+		columns[6] << typo.extension.to_s
 }
 
+unless show_invalid
+	# remove valid? column
+	columns[2] = nil
+	columns.compact!
+	headings[2] = nil
+	headings.compact!
+end
 # print headings
 columns.each_with_index {|column,i|
 	widths[i]=((column.map {|row| row.nil? ? 0 : row.length } << headings[i].length).compact.sort[-1].to_i) + 2
@@ -550,3 +595,4 @@ columns[0].each_with_index {|row,i|
 	puts
 }
 puts
+
