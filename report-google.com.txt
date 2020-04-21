@@ -1,0 +1,65 @@
+URLCrazy Domainname Typo Report
+For       : google.com
+Keyboard  : qwerty
+At        : Wed Mar 09 01:36:18 +1300 2011
+
+# Please wait. Resolving 55 hostnames
+# Please wait. Checking popularity
+Typo Type              Typo           Valid  Pop        IP               Extn  
+-------------------------------------------------------------------------------
+Character Omission     gogle.com      true   108000     203.97.30.147    com   
+Character Omission     googe.com      true   8200       97.74.27.1       com   
+Character Omission     googl.com      true   36400                       com   
+Character Omission     google.cm      true   274000     203.97.30.147    cm    
+Character Omission     goole.com      true   96400      213.165.70.39    com   
+Character Repeat       ggoogle.com    true   5110       203.97.30.147    com   
+Character Repeat       googgle.com    true   9720                        com   
+Character Repeat       googlee.com    true   7680       203.97.30.147    com   
+Character Repeat       googlle.com    true   2640       72.44.90.115     com   
+Character Repeat       gooogle.com    true   29900      203.97.30.147    com   
+Character Swap         gogole.com     true   18600      203.97.30.147    com   
+Character Swap         googel.com     true   406000     203.97.30.147    com   
+Character Swap         google.com     true   396000000  203.97.30.147    com   
+Character Swap         goolge.com     true   19400      203.97.30.147    com   
+Character Swap         ogogle.com     true   12900      203.97.30.147    com   
+Character Replacement  foogle.com     true   23400      64.13.232.120    com   
+Character Replacement  giogle.com     true   22300                       com   
+Character Replacement  goigle.com     true   713        174.120.244.229  com   
+Character Replacement  goofle.com     true   1590       69.89.22.115     com   
+Character Replacement  googke.com     true   2040       174.120.244.229  com   
+Character Replacement  googlr.com     true   18300      203.97.30.147    com   
+Character Replacement  googlw.com     true   1940       72.34.51.47      com   
+Character Replacement  goohle.com     true   1080       184.154.126.182  com   
+Character Replacement  gopgle.com     true   1020       208.73.210.29    com   
+Character Replacement  gpogle.com     true   840        208.73.210.48    com   
+Character Replacement  hoogle.com     true   8680       64.202.189.170   com   
+Character Insertion    gfoogle.com    true   1150                        com   
+Character Insertion    ghoogle.com    true   1750                        com   
+Character Insertion    goiogle.com    true   690                         com   
+Character Insertion    googfle.com    true   961        64.202.189.170   com   
+Character Insertion    googhle.com    true   806        174.120.244.229  com   
+Character Insertion    googler.com    true   108000                      com   
+Character Insertion    googlew.com    true   3420       216.65.41.185    com   
+Character Insertion    googlke.com    true   3530       216.65.41.185    com   
+Character Insertion    gooigle.com    true   1300                        com   
+Character Insertion    goopgle.com    true   617        174.120.244.229  com   
+Character Insertion    gopogle.com    true   3380       216.65.41.185    com   
+Missing Dot            googlecom.com  true   17900      203.97.30.147    com   
+Missing Dot            wwwgoogle.com  true   114000     203.97.30.147    com   
+Singular or Pluralise  googles.com    true   24200                       com   
+Different TLD          google.ca      true   2150000    203.97.30.147    ca    
+Different TLD          google.ch      true   827000     203.97.30.147    ch    
+Different TLD          google.de      true   5700000    203.97.30.147    de    
+Different TLD          google.edu     true   8000                        edu   
+Different TLD          google.es      true   3140000    203.97.30.147    es    
+Different TLD          google.fr      true   3430000    203.97.30.147    fr    
+Different TLD          google.it      true   7620000    203.97.30.147    it    
+Different TLD          google.jp      true   62200      72.14.203.104    jp    
+Different TLD          google.net     true   198000     74.125.45.99     net   
+Different TLD          google.nl      true   2010000    203.97.30.147    nl    
+Different TLD          google.no      true   1780000    203.97.30.147    no    
+Different TLD          google.org     true   474000     64.233.169.104   org   
+Different TLD          google.ru      true   5800000    203.97.30.147    ru    
+Different TLD          google.se      true   2900000    203.97.30.147    se    
+Different TLD          google.us      true   403000     203.97.30.147    us    
+

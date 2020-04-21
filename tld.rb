@@ -1,10 +1,17 @@
+#
+# Copyright Andrew Horton, 2010
+# Permission is granted for use of this source code to be used within WhatWeb
+#
 
 class TLD
 	attr_reader :tlds
-	def initialize()
+
+# test domains such as XN--0ZWM56D are not included
+
 	@tlds=["biz","com","info","name","net","org","pro", # generic
-	"aero","asia","cat","coop","edu","gov","int","jobs","mil","mobi","museum","tel","travel", #sponsored
+	"aero","asia","cat","coop","edu","gov","int","jobs","mil","mobi","museum","tel","travel", "xxx", #sponsored
 	"arpa", #infrastructure
+
 "ac","ad","ae","af","ag","ai","al","am","an","ao","aq","ar","as","at","au","aw","ax","az","ba","bb","bd","be","bf",
 "bg","bh","bi","bj","bm","bn","bo","br","bs","bt","bv","bw","by","bz","ca","cc","cd","cf","cg","ch","ci","ck","cl",
 "cm","cn","co","cr","cu","cv","cx","cy","cz","de","dj","dk","dm","do","dz","ec","ee","eg","eh","er","es","et","eu",
@@ -300,44 +307,45 @@ class TLD
 "zw"=>{"type"=>"country","tld"=>"zw","2nd_level_registration"=>false,"foreign_registration"=>false,"country"=>"Zimbabwe","slds"=>["co.zw","ac.zw","org.zw"]}
 
 }
+
+	def TLD.cc(c)
+		@tld[c]
 	end
 
-	def valid_tld?(t) # does the TLD exist? true or false
+	def TLD.valid_tld?(t) # does the TLD exist? true or false
 		tld(t).nil? ? false : true
 	end
 
-	def valid_sld?(d) # does the SLD exist? true or false
+	def TLD.valid_sld?(d) # does the SLD exist? true or false
 		sld(d).nil? ? false : true
 	end
 
-	def tld(d) # nil if invalid, otherwise string
+	def TLD.tld(d) # nil if invalid, otherwise string
 		tld=d.split('.')[-1]
-
-#		t=@tld.map {|a| a if a["tld"]==tld }.compact[0]
 		t=@tld[tld]
 		t.nil? ? nil : t["tld"]
 	end
 
-	def sld(d) # nil if invalid, otherwise string
+	def TLD.sld(d) # nil if invalid, otherwise string
 		return nil if valid_tld?(d) == false
-		a=a_tld(d)
+		a=tld_a(d)
 		sld=d.split(".")[-2..-1].join(".")
 		a["slds"].include?(sld) ? sld : nil	
 	end
 
-	def a_tld(d) # returns an array of the tld		
-		#a=@tld.map {|a| a if a["tld"]==d.split(".")[-1] }.compact[0]		
+	def TLD.tld_a(d) # returns an array of the tld
 		@tld[d.split(".")[-1]]
 	end
 
-	def valid_domain?(d)
+	def TLD.valid_domain?(d)	
+		return false if d.include?('..')
 		extension(d).nil? ? false : true
 	end
 
-	def extension(d) # what domain is this in?  tld + sld is needed.   nil or string
+	def TLD.extension(d) # what domain is this in?  tld + sld is needed.   nil or string
 		tld = tld(d)
 		return nil if tld.nil?
-		a=a_tld(d)
+		a=tld_a(d)
 
 		if a["2nd_level_registration"] == true
 			return tld
@@ -347,10 +355,19 @@ class TLD
 		end		
 	end
 
-	def registered_name(d) # return just the registered name, like dogs from dogs.com or dogs.co.uk
+	def TLD.registered_name(d) # return just the registered name, like dogs from dogs.com or dogs.co.uk
 		return nil if !valid_domain?(d)
 		tld_len=extension(d).split(".").length		
 		d.split(".")[0..-(tld_len+1)][-1]
+	end
+
+	def TLD.domain_name(d) 
+		return nil if !valid_domain?(d)
+		registered_name(d) + "." + extension(d)
+	end
+
+	def TLD.same_domain?(a,b)
+		domain_name(a) == domain_name(b)
 	end
 
 	def tests

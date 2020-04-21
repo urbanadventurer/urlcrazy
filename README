@@ -1,22 +1,38 @@
-Title:          UrlCrazy Readme
-Version:        0.2
-Description:    UrlCrazy is for the study of domainname typos / url hijacking.
-Release Date:   March 2009
-Author:         horton.nz{at-nospam}gmail, Andrew Horton (urbanadventurer)
-Primary-site:   code.google.com/p/urlcrazy
-Platforms:      Linux, Anything with Ruby
-Copying-policy: BSD
+Title:          URLCrazy Readme
+Version:        0.3
+Description:    UrlCrazy is for the study of domainname typos and URL hijacking
+Release Date:   March 2011
+Author:         Andrew Horton (urbanadventurer)
+Homepage:   	www.morningstarsecurity.com/research/urlcrazy
+Platforms:      Linux, Ruby
+Copying-policy: GPLv2
 
 
-DESCRIPTION
-UrlCrazy is for the study of domainname typos / url hijacking.
+Description
+------------
+URLCrazy enables the study of domainname typos and URL hijacking. URLCrazy is a domainname typo generator.
 
-It generates domainname typo permutations then tests them to learn if they are in use, estimates their popularity and more.
+Use Cases:
+	o) Detect typo squatters cashing in on your domain name
+	o) Protect your brand by registering popular typos
+	o) Identify typo domain names that will get traffic intended for a more popular domain
+
+Features:
+	o) Generates 10 types of typos
+	o) Knows over 8000 common misspellings
+	o) Multiple keyboard layouts
+	o) Check if a typo is a valid domain
+	o) Test if domain typos are in use
+	o) Estimate popularity of a typo
 
 
-TYPES OF TYPOS SUPPORTED
+Types of Typos Supported
+-------------------------
 Character Omission.
 These typos are created by leaving out a letter of the domain name, one letter at a time. For example, www.goole.com and www.gogle.com
+
+Character Repeat.
+These typos are created by repeating a letter of the domain name. For example, www.ggoogle.com and www.gooogle.com
 
 Adjacent Character Swap.
 These typos are created by swapping the order of adjacent letters in the domain name. For example, www.googel.com and www.ogogle.com
@@ -34,18 +50,37 @@ Strip Dashes.
 These typos are created by omitting a dash from the domainname. For example, www.domain-name.com becomes www.domainname.com
 
 Singular or Pluralise.
-These typos are created by making a singular domain plural and vice versa. For example, www.google.com becomes www.googles.com and www.trademe.co.nz becomes www.trademes.co.nz
+These typos are created by making a singular domain plural and vice versa. For example, www.google.com becomes www.googles.com and www.games.co.nz becomes www.game.co.nz
+
+Wrong Top Level Domain.
+For example, www.trademe.co.nz becomes www.trademe.co.nz and www.google.com becomes www.google.org
+Uses the 19 most common top level domains.
+
+Wrong Second Level Domain.
+Uses an alternate, valid second level domain for the top level domain.
+For example, www.trademe.co.nz becomes www.trademe.ac.nz and www.trademe.iwi.nz
+
+Common Misspellings.
+Over 8000 common misspellings from Wikipedia. For example, www.youtube.com becomes www.youtub.com and www.abseil.com becomes www.absail.com
 
 
+Supported Keyboard Layouts
+---------------------------
+Keyboard layouts supported are:
+	* QWERTY
+	* AZERTY
+	* QWERTZ
+	* DVORAK
 
-DOMAIN TESTS
+
 Is the domain valid?
 --------------------
-UrlCrazy has a database of valid top level and second level domains. This information has been compiled from wikipedia and domain registrars. We know whether a domain is valid by checking if it matches toplevel and second level domains. For example, www.trademe.co.bz is a valid domain in Belize which allows any second level domain registrations but www.trademe.xo.nz isn't because xo.nz isn't an allowed second level domain in New Zealand.
+UrlCrazy has a database of valid top level and second level domains. This information has been compiled from Wikipedia and domain registrars. We know whether a domain is valid by checking if it matches toplevel and second level domains. For example, www.trademe.co.bz is a valid domain in Belize which allows any second level domain registrations but www.trademe.xo.nz isn't because xo.nz isn't an allowed second level domain in New Zealand.
+
 
 Popularity Estimate
 -------------------
-We can estimate the relative popularity of a typo by measuring how often that typo has been made on webpages. Querying cuil.com for the number of search results for a typo gives us a indication of how popular a typo is.
+We can estimate the relative popularity of a typo by measuring how often that typo appears on webpages. Querying goole.com for the number of search results for a typo gives us a indication of how popular a typo is.
 
 The drawback of this approach is that you need to manually identify and omit legitimate domains such as googles.com
 
@@ -57,53 +92,26 @@ For example, consider the following typos for google.com.
 19148 goole.com
 18855 googl.com
 17842 ggoogle.com
-16490 googe.com
-16367 googgle.com
-15029 google.cm
-14773 gogole.com
-13227 googlle.com
-11646 googlee.com
-11345 googlr.com
-7417 foogle.com
-6132 hoogle.com
-5313 googlw.com
-5208 giogle.com
-5151 googke.com
-4838 goigle.com
-4662 ogogle.com
-4630 gopgle.com
-4415 goofle.com
-4118 wwwgoogle.com
-3894 goohle.com
-3399 gooigle.com
-2675 gfoogle.com
-1942 googlecom.com
-1534 gopogle.com
-1356 googfle.com
-1089 googhle.com
-892 googlew.com
-747 googlke.com
-618 goiogle.com
-614 goopgle.com
-413 ghoogle.com
-341 goolge.com
-232 googler.com
-228 gpogle.com
+
 
 IP Address
 -------------------
-If the typo domainname is in use Urlcrazy displays the IP it resolves to. An IP repeating for multiple typos or IPs in a close range shows common ownership. For example, gogle.com, gogole.com and googel.com all resolve to 64.233.161.104 which is owned by Google.
+An IP address for a typo domainname indicates it is in use.
+
+Tip: An IP repeating for multiple typos or IPs in a close range shows common ownership. For example, gogle.com, gogole.com and googel.com all resolve to 64.233.161.104 which is owned by Google.
 
 
 
-COUNTRY CODE DATABASE
+Country Code Database
+----------------------
 http://en.wikipedia.org/wiki/Top-level_domain
 http://en.wikipedia.org/wiki/Country_code_top-level_domain
 2nd level domains here:
 http://www.iana.org/domains/root/db/
 
 
-SEE ALSO
+See Also
+---------
 http://en.wikipedia.org/wiki/Wikipedia:AutoWikiBrowser/Typos
 http://en.wikipedia.org/wiki/Wikipedia:Typo
 http://en.wikipedia.org/wiki/Typosquatting
@@ -111,16 +119,17 @@ http://en.wikipedia.org/wiki/Typosquatting
 Strider is tool with similar aims and is produced by Microsoft http://research.microsoft.com/csm/strider/
 
 
-INSTALLATION
+Installation
+-------------
 UrlCrazy requires ruby. If you are using Ubuntu or Debian try:
 	$ sudo apt-get install ruby.
 
-Don't install this, instead execute it from it's own folder.
 
 
-
-CREDITS
-Authored by Andrew Horton (urbanadventurer) horton.nz {at-nospam} gmail
+Credits
+--------
+Authored by Andrew Horton (urbanadventurer). Andrew is a security consultant for Security-Assessment.com
 
 Thanks to Ruby on Rails for Inflector which allowing plural and singular permutations.
+
 
