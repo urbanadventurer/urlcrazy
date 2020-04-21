@@ -1,7 +1,7 @@
 Title:          URLCrazy Readme
-Version:        0.4
+Version:        0.5
 Description:    UrlCrazy is for the study of domainname typos and URL hijacking
-Release Date:   September 2011
+Release Date:   July 2012
 Author:         Andrew Horton (urbanadventurer)
 Homepage:   	www.morningstarsecurity.com/research/urlcrazy
 Platforms:      Linux, Ruby
@@ -10,25 +10,27 @@ Copying-policy: GPLv2
 
 Description
 ------------
-URLCrazy enables the study of domainname typos and URL hijacking. URLCrazy is a domainname typo generator.
+Generate and test domain typos and variations to detect and perform typo squatting, URL hijacking,
+phishing, and corporate espionage.
 
 Use Cases:
-	o) Detect typo squatters cashing in on your domain name
+	o) Detect typo squatters profiting from typos on your domain name
 	o) Protect your brand by registering popular typos
-	o) Identify typo domain names that will get traffic intended for a more popular domain
+	o) Identify typo domain names that will receive traffic intended for another domain
+	o) Conduct phishing attacks during a penetration test
 
 Features:
-	o) Generates 13 types of typos
+	o) Generates 15 types of domain variants
 	o) Knows over 8000 common misspellings
 	o) Supports cosmic ray induced bit flipping
-	o) Multiple keyboard layouts
-	o) Check if a typo is a valid domain
-	o) Test if domain typos are in use
-	o) Estimate popularity of a typo
+	o) Multiple keyboard layouts (qwerty, azerty, qwertz, dvorak)
+	o) Checks if a domain variant is valid
+	o) Test if domain variants are in use
+	o) Estimate popularity of a domain variant
 
 
-Types of Typos Supported
--------------------------
+Types of Domain Variations Supported
+----------------------------------
 Character Omission.
 These typos are created by leaving out a letter of the domain name, one letter at a time. For example, www.goole.com and www.gogle.com
 
@@ -40,6 +42,9 @@ These typos are created by swapping the order of adjacent letters in the domain 
 
 Adjacent Character Replacement.
 These typos are created by replacing each letter of the domain name with letters to the immediate left and right on the keyboard. For example, www.googke.com and www.goohle.com
+
+Double Character Replacement.
+These typos are created by replacing identical, consecutive letters of the domain name with letters to the immediate left and right on the keyboard. For example, www.gppgle.com and www.giigle.com
 
 Adjacent Character Insertion.
 These typos are created by inserting letters to the immediate left and right on the keyboard of each letter. For example, www.googhle.com and www.goopgle.com
@@ -64,6 +69,9 @@ Over 450 sets of words that sound the same when spoken. For example, www.base.co
 
 Bit Flipping.
 Each letter in a domain name is an 8bit character. The character is substituted with the set of valid characters that can be made after a single bit flip. For example, facebook.com becomes bacebook.com, dacebook.com, faaebook.com,fabebook.com,facabook.com, etc.
+
+Homoglyphs.
+Characters that look similar but are different are called homogylphs. An example is that the lower case l looks similar to the numeral one, e.g. l vs 1. For example, google.com becomes goog1e.com.
 
 Wrong Top Level Domain.
 For example, www.trademe.co.nz becomes www.trademe.co.nz and www.google.com becomes www.google.org
@@ -139,7 +147,7 @@ UrlCrazy requires ruby. If you are using Ubuntu or Debian try:
 
 Credits
 --------
-Authored by Andrew Horton (urbanadventurer). Andrew is a security consultant for Security-Assessment.com
-
+Authored by Andrew Horton (urbanadventurer). Andrew is a security consultant for Stratsec.net
 Thanks to Ruby on Rails for Inflector which allows plural and singular permutations.
 Thanks to Wikipedia for the set of common misspellings and homophones.
+

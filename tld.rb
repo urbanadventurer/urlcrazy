@@ -1,3 +1,4 @@
+# coding: utf-8
 #
 # Copyright Andrew Horton, 2010
 # Permission is granted for use of this source code to be used within WhatWeb

@@ -1,90 +1,96 @@
-URLCrazy Domainname Typo Report
-For       : google.com
+URLCrazy Domain Report
+Domain    : google.com
 Keyboard  : qwerty
-At        : Wed Sep 14 01:44:57 +1200 2011
+At        : 2012-07-18 13:36:10 +1000
 
-# Please wait. 81 hostnames to process
-Typo Type              Typo           Pop       DNS-A            DNS-MX                        Extn  
------------------------------------------------------------------------------------------------------
-Character Omission     gogle.com      240000    203.97.30.147    google.com.s9b2.psmtp.com     com   
-Character Omission     googe.com      38200     97.74.27.1       smtp.secureserver.net         com   
-Character Omission     googl.com      149000    203.97.30.147    google.com.s9b2.psmtp.com     com   
-Character Omission     google.cm      171000    203.97.30.147    google.com.s9b2.psmtp.com     cm    
-Character Omission     goole.com      264000    213.165.70.39    mx01.1and1.co.uk              com   
-Character Repeat       ggoogle.com    33300     203.97.30.147    google.com.s9b2.psmtp.com     com   
-Character Repeat       googgle.com    22000                                                    com   
-Character Repeat       googlee.com    4110      203.97.30.147    google.com.s9b2.psmtp.com     com   
-Character Repeat       googlle.com    16300     72.44.90.115                                   com   
-Character Repeat       gooogle.com    113000    203.97.30.147    google.com.s9b2.psmtp.com     com   
-Character Swap         gogole.com     6800      203.97.30.147    google.com.s9b2.psmtp.com     com   
-Character Swap         googel.com     126000    203.97.30.147    google.com.s9b2.psmtp.com     com   
-Character Swap         goolge.com     84800     203.97.30.147    google.com.s9b2.psmtp.com     com   
-Character Swap         ogogle.com     11600     203.97.30.147    google.com.s9b2.psmtp.com     com   
-Character Replacement  foogle.com     13200     173.236.151.213                                com   
-Character Replacement  giogle.com     34500                                                    com   
-Character Replacement  goigle.com     3200      174.120.244.229  nullmx.domainmanager.com      com   
-Character Replacement  goofle.com     6870      69.89.22.115     goofle.com                    com   
-Character Replacement  googke.com     6580      174.120.244.229  nullmx.domainmanager.com      com   
-Character Replacement  googlr.com     11000     203.97.30.147    google.com.s9b2.psmtp.com     com   
-Character Replacement  googlw.com     15400     72.34.51.47      eforwardct.name-services.com  com   
-Character Replacement  goohle.com     4110      184.154.126.182                                com   
-Character Replacement  gopgle.com     3120      174.120.244.229  nullmx.domainmanager.com      com   
-Character Replacement  gpogle.com     3130      208.73.210.48                                  com   
-Character Replacement  hoogle.com     19500     82.98.86.171                                   com   
-Character Insertion    gfoogle.com    4360                                                     com   
-Character Insertion    ghoogle.com    9580                                                     com   
-Character Insertion    goiogle.com    1910                                                     com   
-Character Insertion    googfle.com    483       199.59.241.249                                 com   
-Character Insertion    googhle.com    2950      174.120.244.229  nullmx.domainmanager.com      com   
-Character Insertion    googler.com    64100                                                    com   
-Character Insertion    googlew.com    7870      216.65.41.185                                  com   
-Character Insertion    googlke.com    5890      216.65.41.185                                  com   
-Character Insertion    gooigle.com    5410                                                     com   
-Character Insertion    goopgle.com    4480      174.120.244.229  nullmx.domainmanager.com      com   
-Character Insertion    gopogle.com    5800      216.65.41.185                                  com   
-Missing Dot            googlecom.com  1010      203.97.30.147    google.com.s9b2.psmtp.com     com   
-Missing Dot            wwwgoogle.com  86900     203.97.30.147    google.com.s9b2.psmtp.com     com   
-Singular or Pluralise  googles.com    87000                                                    com   
-Vowel Swap             googla.com     18400     72.34.51.47      eforwardct.name-services.com  com   
-Vowel Swap             googli.com     11100     174.120.244.229  mail.domainmanager.com        com   
-Vowel Swap             googlo.com     7760      174.120.244.229  nullmx.domainmanager.com      com   
-Vowel Swap             googlu.com     299       174.120.244.229  nullmx.domainmanager.com      com   
-Bit Flipping           coogle.com     6110      74.208.42.134    mx00.1and1.com                com   
-Bit Flipping           eoogle.com     1080      208.73.210.29    mx.fakemx.net                 com   
-Bit Flipping           ggogle.com     17500     168.144.110.11   smtp.secureserver.net         com   
-Bit Flipping           gkogle.com     5690      82.98.86.165                                   com   
-Bit Flipping           gmogle.com     304       50.58.197.17                                   com   
-Bit Flipping           gnogle.com     397       174.120.244.229  nullmx.domainmanager.com      com   
-Bit Flipping           goggle.com     154000    174.120.244.218  mail.domainmanager.com        com   
-Bit Flipping           gokgle.com     2140      82.98.86.169                                   com   
-Bit Flipping           gomgle.com     745       208.87.32.69                                   com   
-Bit Flipping           gongle.com     10500     208.87.34.15     nullmx.domainmanager.com      com   
-Bit Flipping           goocle.com     2070      69.6.27.100                                    com   
-Bit Flipping           gooele.com     1900                                                     com   
-Bit Flipping           googde.com     464       184.154.208.234                                com   
-Bit Flipping           googhe.com     1380      82.98.86.169                                   com   
-Bit Flipping           googld.com     5690      174.120.244.229  nullmx.domainmanager.com      com   
-Bit Flipping           googlg.com     2020      199.59.241.249                                 com   
-Bit Flipping           googlm.com     5090      174.139.230.46                                 com   
-Bit Flipping           googme.com     590       82.98.86.169                                   com   
-Bit Flipping           googne.com     447       174.120.244.229  nullmx.domainmanager.com      com   
-Bit Flipping           gooole.com     13600     98.124.199.1                                   com   
-Bit Flipping           goowle.com     273       199.59.241.249                                 com   
-Bit Flipping           ooogle.com     1600      174.120.244.229  nullmx.domainmanager.com      com   
-Bit Flipping           woogle.com     1180      216.65.41.188    woogle.com                    com   
-Wrong TLD              google.ca      8330000   203.97.30.147    google.com.s9b2.psmtp.com     ca    
-Wrong TLD              google.ch      2040000   203.97.30.147    google.com.s9b2.psmtp.com     ch    
-Wrong TLD              google.de      4350000   203.97.30.147    google.com.s9b2.psmtp.com     de    
-Wrong TLD              google.edu     4800                                                     edu   
-Wrong TLD              google.es      9670000   203.97.30.147    google.com.s9b2.psmtp.com     es    
-Wrong TLD              google.fr      11100000  203.97.30.147    google.com.s9b2.psmtp.com     fr    
-Wrong TLD              google.it      21600000  203.97.30.147    google.com.s9b2.psmtp.com     it    
-Wrong TLD              google.jp      158000    203.97.30.147    google.com.s9b2.psmtp.com     jp    
-Wrong TLD              google.net     1480000   203.97.30.147    google.com.s9a1.psmtp.com     net   
-Wrong TLD              google.nl      3980000   203.97.30.147    google.com.s9b2.psmtp.com     nl    
-Wrong TLD              google.no      4700000   203.97.30.147    google.com.s9b2.psmtp.com     no    
-Wrong TLD              google.org     791000    203.97.30.147    google.com.s9b2.psmtp.com     org   
-Wrong TLD              google.ru      10600000  203.97.30.147    google.com.s9b2.psmtp.com     ru    
-Wrong TLD              google.se      7060000   203.97.30.147    aspmx.l.google.com            se    
-Wrong TLD              google.us      1620000   203.97.30.147    google.com.s9b2.psmtp.com     us    
+# Please wait. 87 hostnames to process
+Typo Type                     Typo           Pop       DNS-A            DNS-MX                             Extn  
+-----------------------------------------------------------------------------------------------------------------
+Character Omission            gogle.com      360000    74.125.237.49    google.com.s9b2.psmtp.com          com   
+Character Omission            googe.com      109000    97.74.27.1       mailstore1.secureserver.net        com   
+Character Omission            googl.com      214000    74.125.237.52    google.com.s9b1.psmtp.com          com   
+Character Omission            google.cm      340000    74.125.237.55    google.com.s9b2.psmtp.com          cm    
+Character Omission            goole.com      303000    213.165.70.39    mx00.1and1.co.uk                   com   
+Character Repeat              ggoogle.com    80200     74.125.237.50    google.com.s9b2.psmtp.com          com   
+Character Repeat              googgle.com    38000                                                         com   
+Character Repeat              googlee.com    20300     74.125.237.51    google.com.s9a2.psmtp.com          com   
+Character Repeat              googlle.com    10200     72.44.90.115                                        com   
+Character Repeat              gooogle.com    76500     74.125.237.50                                       com   
+Character Swap                gogole.com     35700     74.125.237.48    google.com.s9b2.psmtp.com          com   
+Character Swap                googel.com     1260000   74.125.237.50    google.com.s9b1.psmtp.com          com   
+Character Swap                goolge.com     44900     74.125.237.48    google.com.s9a1.psmtp.com          com   
+Character Swap                ogogle.com     6600      74.125.237.52    google.com.s9a1.psmtp.com          com   
+Character Replacement         foogle.com     39700     173.236.151.213  mx2.sub4.homie.mail.dreamhost.com  com   
+Character Replacement         giogle.com     890000    216.151.212.175                                     com   
+Character Replacement         goigle.com     4770      74.86.197.160    nullmx.domainmanager.com           com   
+Character Replacement         goofle.com     24600     69.89.22.115     goofle.com                         com   
+Character Replacement         googke.com     29200                                                         com   
+Character Replacement         googlr.com     73000     74.125.237.52    google.com.s9a2.psmtp.com          com   
+Character Replacement         googlw.com     7620                       eforwardct.name-services.com       com   
+Character Replacement         goohle.com     22800     116.212.117.220                                     com   
+Character Replacement         gopgle.com     3220      208.87.34.15     nullmx.domainmanager.com           com   
+Character Replacement         gpogle.com     30000     63.156.206.48                                       com   
+Character Replacement         hoogle.com     27700     64.202.189.170   mailstore1.secureserver.net        com   
+Double Character Replacement  giigle.com     2280      208.87.34.15     nullmx.domainmanager.com           com   
+Double Character Replacement  gppgle.com     7110      74.125.237.51    google.com.s9a2.psmtp.com          com   
+Character Insertion           gfoogle.com    3540                                                          com   
+Character Insertion           ghoogle.com    5990                                                          com   
+Character Insertion           goiogle.com    1530                                                          com   
+Character Insertion           googfle.com    1560000   199.59.241.206                                      com   
+Character Insertion           googhle.com    1810      208.87.34.15     nullmx.domainmanager.com           com   
+Character Insertion           googler.com    17600                                                         com   
+Character Insertion           googlew.com    4920      216.65.41.185                                       com   
+Character Insertion           googlke.com    4730      216.65.41.185                                       com   
+Character Insertion           gooigle.com    27100                                                         com   
+Character Insertion           goopgle.com    1470      82.98.86.169                                        com   
+Character Insertion           gopogle.com    21600     216.65.41.185                                       com   
+Missing Dot                   googlecom.com  6410      74.125.237.50    google.com.s9a2.psmtp.com          com   
+Missing Dot                   wwwgoogle.com  56300     74.125.237.52    google.com.s9a2.psmtp.com          com   
+Singular or Pluralise         googles.com    98300                                                         com   
+Vowel Swap                    googla.com     26400                                                         com   
+Vowel Swap                    googli.com     12200                                                         com   
+Vowel Swap                    googlo.com     5900      74.86.197.160    nullmx.domainmanager.com           com   
+Vowel Swap                    googlu.com     9170                                                          com   
+Bit Flipping                  coogle.com     27900     82.98.86.161                                        com   
+Bit Flipping                  eoogle.com     1340      204.13.162.123   mx.fakemx.net                      com   
+Bit Flipping                  ggogle.com     8160                                                          com   
+Bit Flipping                  gkogle.com     2740                                                          com   
+Bit Flipping                  gmogle.com     373       141.8.224.106                                       com   
+Bit Flipping                  gnogle.com     341                                                           com   
+Bit Flipping                  goggle.com     170000    85.17.162.41     nullmx.domainmanager.com           com   
+Bit Flipping                  gokgle.com     2750                                                          com   
+Bit Flipping                  gomgle.com     1430                                                          com   
+Bit Flipping                  gongle.com     4050                                                          com   
+Bit Flipping                  goocle.com     6690                                                          com   
+Bit Flipping                  gooele.com     4390                                                          com   
+Bit Flipping                  googde.com     761                                                           com   
+Bit Flipping                  googhe.com     1950      199.59.241.206                                      com   
+Bit Flipping                  googld.com     5890      208.87.34.15     nullmx.domainmanager.com           com   
+Bit Flipping                  googlg.com     6100                                                          com   
+Bit Flipping                  googlm.com     4540      174.139.230.46                                      com   
+Bit Flipping                  googme.com     621       199.59.241.206                                      com   
+Bit Flipping                  googne.com     1250                                                          com   
+Bit Flipping                  gooole.com     10300     98.124.199.1                                        com   
+Bit Flipping                  goowle.com     329       199.59.241.206                                      com   
+Bit Flipping                  ooogle.com     1190      208.87.34.15     nullmx.domainmanager.com           com   
+Bit Flipping                  woogle.com     3200      216.65.41.188    woogle.com                         com   
+Homoglyphs                    g00gle.com     26700                                                         com   
+Homoglyphs                    g0ogle.com     16200                                                         com   
+Homoglyphs                    go0gle.com     26700                                                         com   
+Homoglyphs                    goog1e.com     2910                                                          com   
+Wrong TLD                     google.ca      8540000   74.125.237.55    alt1.aspmx.l.google.com            ca    
+Wrong TLD                     google.ch      2190000   74.125.237.55    alt3.aspmx.l.google.com            ch    
+Wrong TLD                     google.de      17600000  74.125.237.56    alt2.aspmx.l.google.com            de    
+Wrong TLD                     google.edu     20600                                                         edu   
+Wrong TLD                     google.es      12200000  74.125.237.63    alt4.aspmx.l.google.com            es    
+Wrong TLD                     google.fr      9640000   74.125.237.63    alt2.aspmx.l.google.com            fr    
+Wrong TLD                     google.it      21200000  74.125.237.63    alt1.aspmx.l.google.com            it    
+Wrong TLD                     google.jp      229000    74.125.237.63    aspmx.l.google.com                 jp    
+Wrong TLD                     google.net     581000    74.125.237.49    alt4.aspmx.l.google.com            net   
+Wrong TLD                     google.nl      5330000   74.125.237.55    alt1.aspmx.l.google.com            nl    
+Wrong TLD                     google.no      5340000   74.125.237.55    google.com.s9a1.psmtp.com          no    
+Wrong TLD                     google.org     879000    216.239.32.27    aspmx.l.google.com                 org   
+Wrong TLD                     google.ru      10800000  74.125.237.55    aspmx.l.google.com                 ru    
+Wrong TLD                     google.se      5870000   74.125.237.55    alt1.aspmx.l.google.com            se    
+Wrong TLD                     google.us      1310000   74.125.237.51    google.com.s9a2.psmtp.com          us    
 

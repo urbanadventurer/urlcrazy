@@ -474,7 +474,7 @@ seated,seeded
 shone,shown
 tidal,title
 trader,traitor
-vary and very"
+vary,very"
 
 	def self.dictionary
 		setup unless defined? @@dictionary
