@@ -6,6 +6,7 @@ New in Version 0.7 (April 2020)
 ## Bug Fixes
 * Fixed non-threadsafe bug with Country IP address lookups
 * Fixed PATH issue when executing from a current working directory outside the URLCrazy folders
+* Fixed popularity scan. Now uses Bing.com search engine results count.
 
 ## Misc
 * Updated Common Misspellings
