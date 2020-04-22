@@ -761,6 +761,9 @@ end
 puts_output output.hostnames_to_process
 
 # resolve popularity faster with threads
+
+$semaphore_countrylookup = Mutex.new
+
 threads=[]
 this_domain.typos.each {|typo|
     threads << Thread.new(typo) {|thistypo|
