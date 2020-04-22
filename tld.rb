@@ -354,41 +354,5 @@ class TLD
 	def TLD.same_domain?(a,b)
 		domain_name(a) == domain_name(b)
 	end
-
-	def tests
-		# get the au array
-		tlds=["au","nz","nn","edu"].each {|tld|
-			domains=["yahoo","yahoo.com","yahoo.co"].each {|domain|
-
-			d=domain+"."+tld
-			puts "testing #{d}"
-			if valid_domain?(d)==true
-				puts "#{d} domain is valid"
-			else
-				puts "#{d} domain is invalid"
-			end
-			puts "domain ext is #{extension(d)}"
-			puts "registered name is #{registered_name(d)}"
-#			puts "tld is #{tld(d)}"
-=begin
-
-			if valid_tld?(d)==true
-				puts "#{d} tld is valid"
-			else
-				puts "#{d} tld is invalid"
-			end
-						
-			if valid_sld?(d)==true
-				puts "#{d} sld is valid"
-			else
-				puts "#{d} sld is invalid"
-			end
-=end						
-			puts
-		 }
-		}
- 
-	end
-
 end
 
