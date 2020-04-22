@@ -21,10 +21,11 @@ require 'resolv-replace'
 require 'csv'
 require 'json'
 require 'colorize'
+#require 'pry'
 
 # add the directory of the file currently being executed to the load path
 $LOAD_PATH.unshift(File.expand_path(File.dirname(__FILE__))) unless
-    $:.include?(File.dirname(__FILE__)) || $LOAD_PATH.include?(File.expand_path(File.dirname(__FILE__)))
+$:.include?(File.dirname(__FILE__)) || $LOAD_PATH.include?(File.expand_path(File.dirname(__FILE__)))
 
 # if __FILE__ is a symlink then follow *every* symlink
 if File.symlink?(__FILE__)
@@ -45,14 +46,14 @@ DNS_SERVERS = %w| 8.8.8.8 8.8.4.4 64.6.64.6 64.6.65.6 209.244.0.3 209.244.0.4 |
 class Keyboard
     def initialize(layout)
         case layout
-            when "qwerty" then @rows=["1234567890-","qwertyuiop","asdfghjkl","zxcvbnm"]
+        when "qwerty" then @rows=["1234567890-","qwertyuiop","asdfghjkl","zxcvbnm"]
             # france, belgium
-            when "azerty" then @rows=["1234567890-","azertyuiop","qsdfghjklm","wxcvbn"]
+        when "azerty" then @rows=["1234567890-","azertyuiop","qsdfghjklm","wxcvbn"]
             # germany, austria, switzerland, hungary
-            when "qwertz" then @rows=["1234567890-","qwertzuiop","asdfghjkl","yxcvbnm"]
+        when "qwertz" then @rows=["1234567890-","qwertzuiop","asdfghjkl","yxcvbnm"]
             # dvorak            
-            when "dvorak" then @rows=["1234567890-","pyfgcrl","aoeuidhtns","qjkxbmwvz"]
-            else raise("Unknown keyboard: #{layout}")
+        when "dvorak" then @rows=["1234567890-","pyfgcrl","aoeuidhtns","qjkxbmwvz"]
+        else raise("Unknown keyboard: #{layout}")
         end     
     end
     
@@ -82,7 +83,7 @@ end
 
 
 class Typo
-attr_accessor :type, :name, :valid_name, :tld, :extension, :registered_name, :popularity, :resolved_a, :resolved_mx, :resolved_ns, :country_a
+    attr_accessor :type, :name, :valid_name, :tld, :extension, :registered_name, :popularity, :resolved_a, :resolved_mx, :resolved_ns, :country_a
     
     def get_resolved
         @resolved_a=""
@@ -94,18 +95,17 @@ attr_accessor :type, :name, :valid_name, :tld, :extension, :registered_name, :po
         resolver.timeouts = [ 3, 15, 30 ]
 
         begin
-              @resolved_a = resolver.getaddress(@name).to_s
-
-              if @resolved_a
-                @country_a = Countrylookup.ip2cc(@resolved_a)
-              end
-        rescue 
-        #   puts "# Resolve failure for #{@name}. #{err}"
+          @resolved_a = resolver.getaddress(@name).to_s
+          if @resolved_a
+            @country_a = Countrylookup.ip2cc(@resolved_a)
         end
+    rescue 
+        #   puts "# Resolve failure for #{@name}. #{err}"
+    end
 
-        begin           
-            @resolved_mx=resolver.getresources(@name,Resolv::DNS::Resource::IN::MX).first.exchange.to_s
-        rescue
+    begin           
+        @resolved_mx=resolver.getresources(@name,Resolv::DNS::Resource::IN::MX).first.exchange.to_s
+    rescue
             #puts "# Resolve failure for #{@name}. Retrying."
         end
 
@@ -121,7 +121,7 @@ attr_accessor :type, :name, :valid_name, :tld, :extension, :registered_name, :po
     
     def get_popularity
         # Google confuses dots for commas and spaces
-    
+
         return "" if !@valid_name
         begin
             http = Net::HTTP.new("www.google.com");
@@ -199,7 +199,7 @@ class Domainname
             t.name=c
             @typos<< t
         }
-    
+
         self.missingdot.sort.uniq.each {|c|
             t=Typo.new
             t.type ="Missing Dot"
@@ -213,7 +213,7 @@ class Domainname
             t.name=c
             @typos<< t
         }
-    
+
         self.singular_or_pluralise.sort.uniq.each {|c|
             t=Typo.new
             t.type ="Singular or Pluralise"
@@ -241,7 +241,7 @@ class Domainname
             t.name=c
             @typos<< t
         } 
-            
+
         self.bit_flipping.sort.uniq.each {|c|
             t=Typo.new
             t.type ="Bit Flipping"
@@ -249,14 +249,14 @@ class Domainname
             @typos<< t
         } 
 
-unless RUBY_VERSION =~ /^1.8/
-        self.homoglyphs.sort.uniq.each {|c|
-            t=Typo.new
-            t.type ="Homoglyphs"
-            t.name=c
-            @typos<< t
-        } 
-end
+        unless RUBY_VERSION =~ /^1.8/
+            self.homoglyphs.sort.uniq.each {|c|
+                t=Typo.new
+                t.type ="Homoglyphs"
+                t.name=c
+                @typos<< t
+            } 
+        end
 
         self.wrong_tld.sort.uniq.each {|c|
             t=Typo.new
@@ -315,7 +315,7 @@ end
                 x[i]=keyleft
                 list << x           
             end
-        
+
             keyright=kb.key_right(@domain[i..i])
             if !keyright.nil?
                 x=@domain.dup
@@ -339,7 +339,7 @@ end
                     x[i+1]=keyleft
                     list << x           
                 end
-        
+
                 keyright=kb.key_right(@domain[i..i])
                 if !keyright.nil?
                     x=@domain.dup
@@ -362,11 +362,11 @@ end
             keyleft=kb.key_left(@domain[i..i])
             if !keyleft.nil?
                 list << @domain[0..i] + keyleft + @domain[i+1..-1]
-            
+
             end
-        
+
             list << @domain[0..i] + @domain[i..i] + @domain[i+1..-1]
-        
+
             keyright=kb.key_right(@domain[i..i])
             if !keyright.nil?
                 list << @domain[0..i] + keyright + @domain[i+1..-1]
@@ -429,7 +429,7 @@ end
     def common_misspellings
         CommonMisspellings.dictionary.keys.select { |x| @domain.include?(x) }.map {|word|   
             @domain.gsub(word, CommonMisspellings.misspelling(word)) }
-    end
+        end
 
     # swap the vowels, but never the first letter of the word
     def vowel_swap
@@ -442,23 +442,23 @@ end
     def homophones
         Homophones.dictionary.keys.select {|x| @domain.include?(x) }.map {|word|
             Homophones.dictionary[word].map {|homophoneword| @domain.gsub(word,homophoneword) } }.flatten
-        
-    end
 
-    def bit_flipping
-        masks = [128,64,32,16,8,4,2,1]
-        allowed_chars = /[a-zA-Z0-9_\-\.]/
-
-        domains=[]
-        @domain.split(//).each_with_index do |c,i| 
-            flipped = masks.map {|mask| (c[0].ord ^ mask).chr.downcase }.select {|x| x =~ allowed_chars }
-            domains << flipped.map {|x| e=@domain.clone; e[i]=x; e }
         end
-        domains.flatten!.sort!.uniq!
-        domains
-    end
 
-    def wrong_tld
+        def bit_flipping
+            masks = [128,64,32,16,8,4,2,1]
+            allowed_chars = /[a-zA-Z0-9_\-\.]/
+
+            domains=[]
+            @domain.split(//).each_with_index do |c,i| 
+                flipped = masks.map {|mask| (c[0].ord ^ mask).chr.downcase }.select {|x| x =~ allowed_chars }
+                domains << flipped.map {|x| e=@domain.clone; e[i]=x; e }
+            end
+            domains.flatten!.sort!.uniq!
+            domains
+        end
+
+        def wrong_tld
 =begin
 .com    Commercial  4,860,000,000
 .org    Noncommercial   1,950,000,000
@@ -480,14 +480,14 @@ end
 .no Norway  32,300,000
 .es Spain   31,000,000
 =end
-        reg_name = TLD.registered_name(@domain)
-        common_tlds = %w|com org edu uk net ca de jp fr au us ru ch it nl se no es|
-        common_tlds.map {|tld| [reg_name,tld].join(".") }   
-    end
+reg_name = TLD.registered_name(@domain)
+common_tlds = %w|com org edu uk net ca de jp fr au us ru ch it nl se no es|
+common_tlds.map {|tld| [reg_name,tld].join(".") }   
+end
 
-    
-    def replace_permutations(string,pattern,replacement)
-        permutations=[]
+
+def replace_permutations(string,pattern,replacement)
+    permutations=[]
         # how many times does pattern appear? it is n
         n = string.scan(pattern).size
         # generate perumations map for n times
@@ -528,26 +528,26 @@ def banner
 asciiart = []
 
 asciiart << '
- ____ _____________.____   _________                             
+____ _____________.____   _________                             
 |    |   \______   \    |  \_   ___ \___________  ___________.__.
 |    |   /|       _/    |  /    \  \|_  __ \__  \ \___   <   |  |
 |    |  / |    |   \    |__\     \___|  | \// __ \_/    / \___  |
 |______/  |____|_  /_______ \______  /__|  (____  /_____ \/ ____|
-                 \/        \/      \/           \/      \/\/     
+\/        \/      \/           \/      \/\/     
 
 '
 
 asciiart << '
- █    ██  ██▀███   ██▓    ▄████▄  ██▀███  ▄▄▄     ▒███████▒▓██   ██▓
- ██  ▓██▒▓██ ▒ ██▒▓██▒   ▒██▀ ▀█ ▓██ ▒ ██▒████▄   ▒ ▒ ▒ ▄▀░ ▒██  ██▒
+█    ██  ██▀███   ██▓    ▄████▄  ██▀███  ▄▄▄     ▒███████▒▓██   ██▓
+██  ▓██▒▓██ ▒ ██▒▓██▒   ▒██▀ ▀█ ▓██ ▒ ██▒████▄   ▒ ▒ ▒ ▄▀░ ▒██  ██▒
 ▓██  ▒██░▓██ ░▄█ ▒▒██░   ▒▓█    ▄▓██ ░▄█ ▒██  ▀█▄ ░ ▒ ▄▀▒░   ▒██ ██░
 ▓▓█  ░██░▒██▀▀█▄  ▒██░   ▒▓▓▄ ▄██▒██▀▀█▄ ░██▄▄▄▄██  ▄▀▒   ░  ░ ▐██▓░
 ▒▒█████▓ ░██▓ ▒██▒░██████▒ ▓███▀ ░██▓ ▒██▒▓█   ▓██▒███████▒  ░ ██▒▓░
 ░▒▓▒ ▒ ▒ ░ ▒▓ ░▒▓░░ ▒░▓  ░ ░▒ ▒  ░ ▒▓ ░▒▓░▒▒   ▓▒█░▒▒ ▓░▒░▒   ██▒▒▒ 
 ░░▒░ ░ ░   ░▒ ░ ▒░░ ░ ▒  ░ ░  ▒    ░▒ ░ ▒░ ▒   ▒▒ ░░▒ ▒ ░ ▒ ▓██ ░▒░ 
- ░░░ ░ ░   ░░   ░   ░ ░  ░         ░░   ░  ░   ▒  ░ ░ ░ ░ ░ ▒ ▒ ░░  
-   ░        ░         ░  ░ ░        ░          ░  ░ ░ ░     ░ ░     
-                         ░                        ░         ░ ░     
+░░░ ░ ░   ░░   ░   ░ ░  ░         ░░   ░  ░   ▒  ░ ░ ░ ░ ░ ▒ ▒ ░░  
+░        ░         ░  ░ ░        ░          ░  ░ ░ ░     ░ ░     
+░                        ░         ░ ░     
 
 '
 
@@ -558,15 +558,15 @@ db    db d8888b. db       .o88b. d8888b.  .d8b.  d88888D db    db
 88    88 88`8b   88      8b      88`8b   88~~~88   d8'      88    
 88b  d88 88 `88. 88booo. Y8b  d8 88 `88. 88   88  d8' db    88    
 ~Y8888P' 88   YD Y88888P  `Y88P' 88   YD YP   YP d88888P    YP    
-                                                                  
+
 "
 
 asciiart << '
- _______ ______ _____   ______                         
+_______ ______ _____   ______                         
 |   |   |   __ \     |_|      |.----.---.-.-----.--.--.
 |   |   |      <       |   ---||   _|  _  |-- __|  |  |
 |_______|___|__|_______|______||__| |___._|_____|___  |
-                                                |_____|
+|_____|
 
 '
 
@@ -595,8 +595,8 @@ end
 
 
 def usage 
-random_colour = [:red, :green, :blue, :yellow, :magenta, :cyan ][ rand(6) ]
-print_output banner.colorize( random_colour )
+    random_colour = [:red, :green, :blue, :yellow, :magenta, :cyan ][ rand(6) ]
+    print_output banner.colorize( random_colour )
 
 print "URLCrazy version #{$VERSION} by Andrew Horton (urbanadventurer)
 Visit http://www.morningstarsecurity.com/research/urlcrazy
@@ -613,15 +613,15 @@ domain, and wrong second level domain.
 Usage: #{$0} [options] domain
 
 Options
- -k, --keyboard=LAYOUT  Options are: qwerty, azerty, qwertz, dvorak (default: qwerty)
- -p, --popularity       Check domain popularity with Google
- -r, --no-resolve       Do not resolve DNS
- -i, --show-invalid     Show invalid domain names
- -f, --format=TYPE      Human readable or CSV (default: human readable)
- -o, --output=FILE      Output file
- -n, --nocolor          Disable colour
- -h, --help             This help
- -v, --version          Print version information. This version is #{$VERSION}
+-k, --keyboard=LAYOUT  Options are: qwerty, azerty, qwertz, dvorak (default: qwerty)
+-p, --popularity       Check domain popularity with Google
+-r, --no-resolve       Do not resolve DNS
+-i, --show-invalid     Show invalid domain names
+-f, --format=TYPE      Human readable or CSV (default: human readable)
+-o, --output=FILE      Output file
+-n, --nocolor          Disable colour
+-h, --help             This help
+-v, --version          Print version information. This version is #{$VERSION}
 
 "
 # -R, --only-resolve    Show only domain names that DNS resolve
@@ -660,61 +660,61 @@ $output_filep=nil
 keyboard_layout="qwerty"
 output_type="human"
 
- opts = GetoptLong.new(
-      [ '--help', '-h', GetoptLong::NO_ARGUMENT ],
-      [ '--keyboard','-k', GetoptLong::REQUIRED_ARGUMENT ],
-      [ '--no-resolve','-r', GetoptLong::NO_ARGUMENT ],
-      [ '--popularity','-p', GetoptLong::NO_ARGUMENT ],
-      [ '--show-invalid','-i', GetoptLong::NO_ARGUMENT ],
-      [ '--output','-o', GetoptLong::REQUIRED_ARGUMENT ],
-      [ '--format','-f', GetoptLong::REQUIRED_ARGUMENT ],
-      [ '--only-resolve','-R', GetoptLong::NO_ARGUMENT ],
-      [ '--nocolor','-n', GetoptLong::NO_ARGUMENT ],
-      [ '-v','--version', GetoptLong::NO_ARGUMENT ]
-    )
+opts = GetoptLong.new(
+  [ '--help', '-h', GetoptLong::NO_ARGUMENT ],
+  [ '--keyboard','-k', GetoptLong::REQUIRED_ARGUMENT ],
+  [ '--no-resolve','-r', GetoptLong::NO_ARGUMENT ],
+  [ '--popularity','-p', GetoptLong::NO_ARGUMENT ],
+  [ '--show-invalid','-i', GetoptLong::NO_ARGUMENT ],
+  [ '--output','-o', GetoptLong::REQUIRED_ARGUMENT ],
+  [ '--format','-f', GetoptLong::REQUIRED_ARGUMENT ],
+  [ '--only-resolve','-R', GetoptLong::NO_ARGUMENT ],
+  [ '--nocolor','-n', GetoptLong::NO_ARGUMENT ],
+  [ '-v','--version', GetoptLong::NO_ARGUMENT ]
+  )
 
 begin
- opts.each do |opt, arg|
+   opts.each do |opt, arg|
     case opt
-        when '--help','-h'
-                usage
-                exit
-        when '--keyboard','-k'
-                if ['qwerty','qwertz','dvorak','azerty'].include? arg.downcase
+    when '--help','-h'
+        usage
+        exit
+    when '--keyboard','-k'
+        if ['qwerty','qwertz','dvorak','azerty'].include? arg.downcase
             keyboard_layout=arg.downcase
         else
             puts "Error: Unknown keyboard layout: #{arg}"
             exit
         end
-        when '--no-resolve','-r'
-                resolve_domains=false
+    when '--no-resolve','-r'
+        resolve_domains=false
     when '--show-invalid','-i'
-                show_invalid=true
+        show_invalid=true
     when '--only-resolve','-R'
-                show_only_resolve=true  
-        when '--popularity','-p'
-                check_popularity=true 
-        when '--format','-f'
-                output_type=arg.downcase
+        show_only_resolve=true  
+    when '--popularity','-p'
+        check_popularity=true 
+    when '--format','-f'
+        output_type=arg.downcase
         unless ["human","csv","json"].include?(output_type)
             puts "Invalid output type"
             exit 1
         end
-        when '--output','-o'
-                output_filename=arg
-                String.disable_colorization = true
-        when '--nocolor','-n'
-                String.disable_colorization = true
+    when '--output','-o'
+        output_filename=arg
+        String.disable_colorization = true
+    when '--nocolor','-n'
+        String.disable_colorization = true
         begin
             $output_filep = File.new(output_filename,"w")           
         rescue
             puts "Cannot write to output file, #{output_filename}"
             exit 1
         end
-        when '-V','--version'
-                puts $VERSION; exit
+    when '-V','--version'
+        puts $VERSION; exit
     end
- end
+end
 rescue
     puts
     usage
@@ -722,8 +722,8 @@ rescue
 end
 
 if ARGV.length < 1
-        usage
-        exit
+    usage
+    exit
 end
 
 $keyboard=Keyboard.new(keyboard_layout)
@@ -734,14 +734,14 @@ abort "Aborting. Invalid domainname." unless this_domain.valid == true
 abort "Aborting. Cannot show only domains that resolve when not resolving domains." if show_only_resolve and not resolve_domains
 
 case output_type
-    when "human"
-        output = OutputHuman.new( this_domain, keyboard_layout, check_popularity, resolve_domains, show_invalid )
-    when "csv"
-        output = OutputCSV.new( this_domain, keyboard_layout, check_popularity, resolve_domains, show_invalid )
-    when "json"
-        output = OutputJSON.new( this_domain, keyboard_layout, check_popularity, resolve_domains, show_invalid )
-    else
-        abort "Unknown output type"
+when "human"
+    output = OutputHuman.new( this_domain, keyboard_layout, check_popularity, resolve_domains, show_invalid )
+when "csv"
+    output = OutputCSV.new( this_domain, keyboard_layout, check_popularity, resolve_domains, show_invalid )
+when "json"
+    output = OutputJSON.new( this_domain, keyboard_layout, check_popularity, resolve_domains, show_invalid )
+else
+    abort "Unknown output type"
 end
 
 output.header
