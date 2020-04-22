@@ -5,6 +5,7 @@ New in Version 0.7 (April 2020)
 
 ## Bug Fixes
 * Fixed non-threadsafe bug with Country IP address lookups
+* Fixed PATH issue when executing from a current working directory outside the URLCrazy folders
 
 ## Misc
 * Updated Common Misspellings
