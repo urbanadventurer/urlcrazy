@@ -12,7 +12,7 @@ aerie,airy
 affect,effect
 aid,aide
 ail,ale
-air,ere,,heir
+air,ere,heir
 aisle,ill,isle
 all,awl
 allowed,aloud
@@ -288,7 +288,7 @@ naval,navel
 nay,neigh
 nicks,nix
 none,nun
-oar,,andore
+oar,andore
 ode,owed
 oh,owe
 once,wants
@@ -343,7 +343,7 @@ re-cover,recover
 re-lay,relay
 read,red
 read,reed
-real,reel,,riel
+real,reel,riel
 recede,reseed
 reek,wreak
 residence,residents
@@ -412,14 +412,14 @@ tears,tiers
 teas,tease,tees
 tense,tents
 than,then
-there,their,,theyre
+there,their,theyre
 threw,through
 throne,thrown
 thyme,time
 tide,tied
 tier,tire
 tighten,titan
-to,too,,two
+to,too,two
 toad,toed,towed
 toe,tow
 told,tolled
@@ -439,7 +439,7 @@ waiver,waver
 wale,whale
 war,wore
 ward,warred
-ware,wear,,where
+ware,wear,where
 warn,worn
 wax,whacks
 way,weigh,whey
@@ -462,6 +462,7 @@ whiled,wild
 whine,wine
 whined,wind,wined
 whirled,world
+accept,except
 whit,wit
 white,wight
 whither,wither
