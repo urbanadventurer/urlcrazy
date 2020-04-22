@@ -1,3 +1,18 @@
+New in Version 0.7 (April 2020)
+
+## Features
+* Now checks all country TLDs
+
+## Bug Fixes
+* Fixed non-threadsafe bug with Country IP address lookups
+
+## Misc
+* Updated Common Misspellings
+* Updated Country Database
+* Fixed whitespace indendation
+* Updated ASCII banner colours
+
+
 New in Version 0.6 (September 2017)
 
 ## Background
