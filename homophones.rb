@@ -1,7 +1,7 @@
 class Homophones
 
 # from http://en.wikipedia.org/wiki/Wikipedia:Lists_of_common_misspellings/Homophones 13/9/2011
-@@homophones="accept,except
+@@homophones = "accept,except
 acclamation,acclimation
 acts,ax,axe
 adolescence,adolescents
