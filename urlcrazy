@@ -116,7 +116,7 @@ class Typo
     end
   end
   
-  def get_popularity
+  def get_popularity_google
     # Google confuses dots for commas and spaces
 
     return "" if !@valid_name
@@ -134,8 +134,27 @@ class Typo
     end
     return @popularity = r
   end
-end
 
+ def get_popularity_bing
+    return "" if !@valid_name
+    begin
+      http = Net::HTTP.new("www.bing.com");
+      req = Net::HTTP::Get.new("/search?q=%22#{@name}%22&qs=n&first=10&FORM=PERE&setlang=en-us&setmkt=", {"User-Agent" => "Wget/1.19.4 (linux-gnu)"})
+      res = http.request(req)
+      resp = res.body
+      r = resp.scan(/<span class="sb_count">([^<]+)/).flatten.first
+      puts "#{@name} - #{r}"
+      r = r.encode(Encoding.find('ASCII'), {:invalid => :replace, :undef=>:replace, :replace=>"" } ).split[2]
+      puts r
+    rescue
+      return 0
+    rescue Timeout::Error
+      puts "# Timeout for #{@name}. Retrying"
+      retry
+    end
+    return @popularity = r
+  end
+end
 
 class Domainname
   attr_accessor :domain, :registered_name, :tld, :extension, :valid, :typos
