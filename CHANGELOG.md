@@ -9,6 +9,7 @@ New in Version 0.7 (April 2020)
 
 ## Misc
 * Updated Common Misspellings
+* Updated Homophones
 * Updated Country Database
 * Fixed whitespace indendation
 * Updated ASCII banner colours
