@@ -104,13 +104,13 @@ class Typo
     end
 
     begin           
-      @resolved_mx=resolver.getresources(@name,Resolv::DNS::Resource::IN::MX).first.exchange.to_s
+      @resolved_mx=resolver.getresources(@name, Resolv::DNS::Resource::IN::MX).first.exchange.to_s
     rescue
       #puts "# Resolve failure for #{@name}. Retrying."
     end
 
     begin           
-      @resolved_ns=resolver.getresources(@name,Resolv::DNS::Resource::IN::NS).first.name.to_s
+      @resolved_ns=resolver.getresources(@name, Resolv::DNS::Resource::IN::NS).first.name.to_s
     rescue
       #puts "# Resolve failure for #{@name}. Retrying."
     end
@@ -303,7 +303,7 @@ class Domainname
     kb = $keyboard
     list = Array.new
 
-    (0..@domain.length-1).each { |i|
+    (0..@domain.length - 1).each { |i|
         keyleft = kb.key_left(@domain[i..i])
         if !keyleft.nil?
             x = @domain.dup
@@ -325,7 +325,7 @@ class Domainname
     kb = $keyboard
     list = Array.new
 
-    (0..@domain.length-1).each {|i|
+    (0..@domain.length-1).each { |i|
         if @domain[i..i] == @domain[i+1..i+1]
           keyleft = kb.key_left(@domain[i..i])
           if !keyleft.nil?
@@ -351,17 +351,17 @@ class Domainname
   def character_insertion
     kb = $keyboard
     list = Array.new
-    (0..@domain.length-1).each {|i|
+    (0..@domain.length - 1).each { |i|
         keyleft = kb.key_left(@domain[i..i])
         if !keyleft.nil?
-            list << @domain[0..i] + keyleft + @domain[i+1..-1]
+            list << @domain[0..i] + keyleft + @domain[i + 1..-1]
         end
 
-        list << @domain[0..i] + @domain[i..i] + @domain[i+1..-1]
+        list << @domain[0..i] + @domain[i..i] + @domain[i + 1..-1]
 
         keyright = kb.key_right(@domain[i..i])
         if !keyright.nil?
-            list << @domain[0..i] + keyright + @domain[i+1..-1]
+            list << @domain[0..i] + keyright + @domain[i + 1..-1]
         end
     }
     list
@@ -664,11 +664,9 @@ if ARGV.length < 1
     exit
 end
 
-$keyboard=Keyboard.new(keyboard_layout)
-
-this_domain=Domainname.new(ARGV[0].downcase)
+$keyboard = Keyboard.new(keyboard_layout)
+this_domain = Domainname.new(ARGV[0].downcase)
 abort "Aborting. Invalid domainname." unless this_domain.valid == true
-
 abort "Aborting. Cannot show only domains that resolve when not resolving domains." if show_only_resolve and not resolve_domains
 
 case output_type
