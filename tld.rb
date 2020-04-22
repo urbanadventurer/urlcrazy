@@ -1,22 +1,25 @@
 # coding: utf-8
 #
-# Copyright Andrew Horton, 2010
-# Permission is granted for use of this source code to be used within WhatWeb
-#
+# Copyright Andrew Horton, 2010-2020
 
 class TLD
 	attr_reader :tlds
 
+  @tlds = File.open($LOAD_PATH.first + "/tlds-alpha-by-domain.txt").readlines.map {|x| next if x[0] == "#" ; x.downcase.strip}.compact
+  @tld={}
 
-@tlds = File.open($LOAD_PATH.first + "/tlds-alpha-by-domain.txt").readlines.map {|x| next if x[0] == "#" ; x.downcase.strip}.compact
+  # seed Intl domains we don't have any SLD data for
+  @tlds.each do |tld|
+    @tld[tld] = {"type"=>"country","tld"=>tld,"2nd_level_registration"=>true,"foreign_registration"=>true,"country"=>"Intl","slds"=>[]}
+  end
 
 # if you can register at the 2nd level, then sld's arent listed.
 # the point of this is to identify & remove domains that aren't possible.
 # also used to work out pluralisation - may miss some slds not listed
 
-# would be more complete with antoehr variable to say if 2nd level reg is possible and have slds for all countries
+# would be more complete with another variable to say if 2nd level reg is possible and have slds for all countries
 
-@tld={
+@tld=@tld.merge({
 "biz"=>{"type"=>"tld","tld"=>"biz","2nd_level_registration"=>true,"foreign_registration"=>true,"country"=>"Intl","slds"=>[]},
 "com"=>{"type"=>"tld","tld"=>"com","2nd_level_registration"=>true,"foreign_registration"=>true,"country"=>"Intl","slds"=>[]},
 "info"=>{"type"=>"tld","tld"=>"info","2nd_level_registration"=>true,"foreign_registration"=>true,"country"=>"Intl","slds"=>[]},
@@ -290,8 +293,7 @@ class TLD
 "za"=>{"type"=>"country","tld"=>"za","2nd_level_registration"=>false,"foreign_registration"=>true,"country"=>"South Africa","slds"=>["ac.za","city.za","co.za","edu.za","gov.za","law.za","mil.za","nom.za","org.za","school.za","alt.za","net.za","ngo.za","tm.za","web.za","bourse.za","agric.za","cybernet.za","grondar.za","iaccess.za","inca.za","nis.za","olivetti.za","pix.za","db.za","imt.za"]},
 "zm"=>{"type"=>"country","tld"=>"zm","2nd_level_registration"=>false,"foreign_registration"=>false,"country"=>"Zambia","slds"=>["co.zm","org.zm","ac.zm"]},
 "zw"=>{"type"=>"country","tld"=>"zw","2nd_level_registration"=>false,"foreign_registration"=>false,"country"=>"Zimbabwe","slds"=>["co.zw","ac.zw","org.zw"]}
-
-}
+})
 
 	def TLD.cc(c)
 		@tld[c]
