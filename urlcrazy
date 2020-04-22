@@ -595,7 +595,7 @@ end
 
 
 def usage 
-    random_colour = [:red, :green, :blue, :yellow, :magenta, :cyan ][ rand(6) ]
+    random_colour = [:red, :green, :blue, :yellow, :cyan ][ rand(5) ]
     print_output banner.colorize( random_colour )
 
 print "URLCrazy version #{$VERSION} by Andrew Horton (urbanadventurer)
