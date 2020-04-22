@@ -3,7 +3,6 @@
 # Copyright Andrew Horton, 2010-2020
 
 class TLD
-	attr_reader :tlds
 
   @tlds = File.open($LOAD_PATH.first + "/tlds-alpha-by-domain.txt").readlines.map {|x| next if x[0] == "#" ; x.downcase.strip}.compact
   @tld={}
@@ -294,6 +293,14 @@ class TLD
 "zm"=>{"type"=>"country","tld"=>"zm","2nd_level_registration"=>false,"foreign_registration"=>false,"country"=>"Zambia","slds"=>["co.zm","org.zm","ac.zm"]},
 "zw"=>{"type"=>"country","tld"=>"zw","2nd_level_registration"=>false,"foreign_registration"=>false,"country"=>"Zimbabwe","slds"=>["co.zw","ac.zw","org.zw"]}
 })
+
+  def TLD.hash
+    @tld
+  end
+
+  def TLD.all_tlds
+    @tlds
+  end
 
 	def TLD.cc(c)
 		@tld[c]
