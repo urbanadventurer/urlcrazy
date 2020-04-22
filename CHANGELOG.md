@@ -1,7 +1,7 @@
 New in Version 0.7 (April 2020)
 
 ## Features
-* Now checks all country TLDs
+* Now checks all country and International TLDs
 
 ## Bug Fixes
 * Fixed non-threadsafe bug with Country IP address lookups
