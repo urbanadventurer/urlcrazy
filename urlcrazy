@@ -279,14 +279,21 @@ class Domainname
       t.name = c
       @typos << t
     } 
-
+  
     self.wrong_sld.sort.uniq.each {|c|
       t = Typo.new
       t.type = "Wrong SLD"
       t.name = c
       @typos << t
     } 
-      
+  
+    self.all_sld.sort.uniq.each {|c|
+      t = Typo.new
+      t.type = "All SLD"
+      t.name = c
+      @typos << t
+    } 
+
     # remove duplicate names
     found=Hash.new(0);
     @typos= @typos.select {|x| x if 1 == found[x.name] += 1; }
@@ -430,6 +437,12 @@ class Domainname
     else
         []
     end
+  end
+
+  def all_sld
+    reg_name = TLD.registered_name(@domain)
+    all_slds = TLD.hash.map {|tld,hash| hash["slds"] unless hash["slds"].empty? }.compact.flatten
+    all_slds.map {|sld| "#{reg_name}.#{sld}" }
   end
 
   def common_misspellings
