@@ -1,5 +1,5 @@
 # From https://en.wikipedia.org/wiki/Wikipedia:Lists_of_common_misspellings/For_machines
-# Last updated 09/2017
+# Last updated 04/2020
 #
 abandonned->abandoned
 aberation->aberration
@@ -209,10 +209,10 @@ aiport->airport
 airbourne->airborne
 aircaft->aircraft
 aircrafts->aircraft
-aircrafts'->aircraft's
 airporta->airports
 airrcraft->aircraft
 aisian->asian
+aka->a.k.a.
 albiet->albeit
 alchohol->alcohol
 alchoholic->alcoholic
@@ -1082,7 +1082,6 @@ councellors->councillors, counselors, councilors
 counries->countries
 countains->contains
 countires->countries
-countrie's->countries, countries', country's
 coururier->courier, couturier
 coverted->converted, covered, coveted
 cpoy->coy, copy
@@ -1242,7 +1241,6 @@ dicovers->discovers
 dicovery->discovery
 dictionarys->dictionaries
 dicussed->discussed
-didnt->didn't
 diea->idea, die
 dieing->dying, dyeing
 dieties->deities
@@ -1341,13 +1339,11 @@ docrines->doctrines
 doctines->doctrines
 documenatry->documentary
 doens->does
-doesnt->doesn't
 doign->doing
 dominaton->domination
 dominent->dominant
 dominiant->dominant
 donig->doing
-dosen't->doesn't
 doub->doubt, daub
 doulbe->double
 dowloads->downloads
@@ -1492,6 +1488,8 @@ enxt->next
 epidsodes->episodes
 epsiode->episode
 equialent->equivalent
+equalibrium->equilibrium
+equelibrium->equilibrium
 equilibium->equilibrium
 equilibrum->equilibrium
 equiped->equipped
@@ -1834,7 +1832,6 @@ Habsbourg->Habsburg
 haemorrage->haemorrhage
 haev->have, heave
 halarious->hilarious
-Hallowean->Hallowe'en, Halloween
 halp->help
 hapen->happen
 hapened->happened
@@ -1858,7 +1855,6 @@ harrasses->harassed
 harrassing->harassing
 harrassment->harassment
 harrassments->harassments
-hasnt->hasn't
 Hatian->Haitian
 haviest->heaviest
 headquarer->headquarter
@@ -2188,7 +2184,6 @@ irrelevent->irrelevant
 irreplacable->irreplaceable
 irresistable->irresistible
 irresistably->irresistibly
-isnt->isn't
 Israelies->Israelis
 issueing->issuing
 itnroduced->introduced
@@ -2461,8 +2456,6 @@ modle->model
 moent->moment
 moeny->money
 mohammedans->muslims
-moil->mohel
-moil->soil
 moleclues->molecules
 momento->memento
 monestaries->monasteries
@@ -2547,7 +2540,6 @@ nestin->nesting
 neverthless->nevertheless
 newletters->newsletters
 nickle->nickel
-nightfa;;->nightfall
 nightime->nighttime
 nineth->ninth
 ninteenth->nineteenth
@@ -2646,6 +2638,7 @@ officialy->officially
 offred->offered
 oftenly->often
 oging->going, ogling
+olther->other
 omision->omission
 omited->omitted
 omiting->omitting
@@ -2698,7 +2691,8 @@ originnally->originally
 origional->original
 orignally->originally
 orignially->originally
-otehr->other
+otehr->other 
+otherwordly->otherworldly
 oublisher->publisher
 ouevre->oeuvre
 oustanding->outstanding
@@ -2710,7 +2704,6 @@ owrk->work
 owudl->would
 oxigen->oxygen
 oximoron->oxymoron
-p0enis->penis
 paide->paid
 paitience->patience
 palce->place, palace
@@ -2788,6 +2781,7 @@ percepted->perceived
 percieve->perceive
 percieved->perceived
 perenially->perennially
+peretrator->perpetrator
 perfomance->performance
 perfomers->performers
 performence->performance
@@ -3238,8 +3232,7 @@ refereneced->referenced
 refereneces->references
 referiang->referring
 refering->referring
-refernce->reference
-refernce->references
+refernce->reference, references
 refernces->references
 referrence->reference
 referrences->references
@@ -3526,7 +3519,6 @@ shopkeeepers->shopkeepers
 shorly->shortly
 shortwhile->short while
 shoudl->should
-shoudln->should, shouldn't
 shouldnt->should not
 shreak->shriek
 shrinked->shrunk
@@ -3689,6 +3681,7 @@ sturcture->structure
 subcatagories->subcategories
 subcatagory->subcategory
 subconsiously->subconsciously
+subdivisio->subdivision
 subjudgation->subjugation
 submachne->submachine
 subpecies->subspecies
@@ -3882,7 +3875,6 @@ terroist->terrorist
 testiclular->testicular
 testomony->testimony
 tghe->the
-thast->that, that's
 theather->theater
 theese->these
 theif->thief
@@ -3893,7 +3885,6 @@ ther->there, their, the
 therafter->thereafter
 therby->thereby
 theri->their
-theyre->they're
 thgat->that
 thge->the
 thier->their
@@ -3927,6 +3918,7 @@ thyat->that
 tiem->time, Tim
 tihkn->think
 tihs->this
+timeschedule->time schedule
 timne->time
 tiome->time, tome
 tje->the
@@ -3937,7 +3929,6 @@ tkaes->takes
 tkaing->taking
 tlaking->talking
 tobbaco->tobacco
-todays->today's
 todya->today
 toghether->together
 toke->took
@@ -3952,7 +3943,7 @@ tormenters->tormentors
 tornadoe->tornado
 torpeados->torpedoes
 torpedos->torpedoes
-tortise ->tortoise
+tortise->tortoise
 tothe->to the
 toubles->troubles
 tounge->tongue
@@ -3987,6 +3978,7 @@ transmissable->transmissible
 transporation->transportation
 tremelo->tremolo
 tremelos->tremolos
+trigered->triggered
 triguered->triggered
 triology->trilogy
 troling->trolling
@@ -3997,6 +3989,7 @@ trustworthyness->trustworthiness
 turnk->turnkey, trunk
 Tuscon->Tucson
 tust->trust
+tution->tuition
 twelth->twelfth
 twon->town
 twpo->two
@@ -4191,7 +4184,6 @@ warantee->warranty
 wardobe->wardrobe
 warrent->warrant
 warrriors->warriors
-wasnt->wasn't
 wass->was
 watn->want
 wayword->wayward
@@ -4278,3 +4270,16 @@ youself->yourself
 ytou->you
 yuo->you
 zeebra->zebra
+aircrafts'->aircraft's
+countrie's->countries, countries', country's
+didnt->didn't
+doesnt->doesn't
+dosen't->doesn't
+Hallowean->Hallowe'en, Halloween
+hasnt->hasn't
+isnt->isn't
+shoudln->should, shouldn't
+thast->that, that's
+theyre->they're
+todays->today's
+wasnt->wasn't
