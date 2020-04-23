@@ -44,6 +44,11 @@ require 'homophones.rb'
 require 'country.rb'
 require 'output.rb'
 
+
+$logger = Logger.new(STDOUT)
+$logger.level = Logger::DEBUG
+
+
 $VERSION = "0.7"
 # DNS_SERVERS = %w| 8.8.8.8 8.8.4.4 64.6.64.6 64.6.65.6 209.244.0.3 209.244.0.4 |
 
