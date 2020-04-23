@@ -331,20 +331,21 @@ class Domainname
       t.name = c
       @typos << t
     } 
-  
+
     self.wrong_sld.sort.uniq.each {|c|
       t = Typo.new
       t.type = "Wrong SLD"
       t.name = c
       @typos << t
     } 
-  
+=begin
     self.all_sld.sort.uniq.each {|c|
       t = Typo.new
       t.type = "All SLD"
       t.name = c
       @typos << t
     } 
+=end
 
     # remove duplicate names
     found=Hash.new(0);
