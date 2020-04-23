@@ -104,13 +104,13 @@ class Typo
     end
 
     begin           
-      @resolved_mx=resolver.getresources(@name, Resolv::DNS::Resource::IN::MX).first.exchange.to_s
+      @resolved_mx = resolver.getresources(@name, Resolv::DNS::Resource::IN::MX).first.exchange.to_s
     rescue
       #puts "# Resolve failure for #{@name}. Retrying."
     end
 
     begin           
-      @resolved_ns=resolver.getresources(@name, Resolv::DNS::Resource::IN::NS).first.name.to_s
+      @resolved_ns = resolver.getresources(@name, Resolv::DNS::Resource::IN::NS).first.name.to_s
     rescue
       #puts "# Resolve failure for #{@name}. Retrying."
     end
