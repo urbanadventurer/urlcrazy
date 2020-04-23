@@ -21,6 +21,10 @@ require 'resolv-replace'
 require 'csv'
 require 'json'
 require 'colorize'
+require 'async'
+require 'async/dns'
+require 'async/http'
+require 'logger'
 #require 'pry'
 
 # add the directory of the file currently being executed to the load path
