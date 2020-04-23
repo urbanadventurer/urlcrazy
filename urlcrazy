@@ -102,35 +102,64 @@ end
 class Typo
   attr_accessor :type, :name, :valid_name, :tld, :extension, :registered_name, :popularity, :resolved_a, :resolved_mx, :resolved_ns, :country_a
   
-  def get_resolved
+  def get_resolved(task: Async::Task.current)
     @resolved_a = ""
     @resolved_mx = ""
     @resolved_ns = ""
     return if !@valid_name
 
-    resolver = Resolv::DNS.new( :nameserver => DNS_SERVERS)
-    resolver.timeouts = [3, 15, 30]
+    unless defined? @@resolver # Global Resolver
+      $logger.debug "create resolver"
+      # $resolver = Async::DNS::Resolver.new( ASYNC_DNS_SERVERS , timeout:30)
+      @@resolver = Async::DNS::Resolver.new( ASYNC_DNS_SERVERS , timeout:30)
+    end
 
-    begin
-      @resolved_a = resolver.getaddress(@name).to_s
-      if @resolved_a
-        @country_a = Countrylookup.ip2cc(@resolved_a)
+#    resolver = Resolv::DNS.new( :nameserver => DNS_SERVERS)  
+#    resolver.timeouts = [10, 30, 60]
+
+    task.async do |subtask|
+      begin
+        addresses = @@resolver.query(@name, Resolv::DNS::Resource::IN::A)
+
+        if addresses.answer.first
+          @resolved_a = addresses.answer.first.last.address.to_s
+        end
+
+        if @resolved_a
+          @country_a = Countrylookup.ip2cc(@resolved_a)
+        end
+
+      rescue StandardError => e
+        $logger.error "# Resolve A failure for #{@name}. #{e} Retrying."
+      rescue
       end
-    rescue 
-      #   puts "# Resolve failure for #{@name}. #{err}"
     end
 
-    begin           
-      @resolved_mx = resolver.getresources(@name, Resolv::DNS::Resource::IN::MX).first.exchange.to_s
-    rescue
-      #puts "# Resolve failure for #{@name}. Retrying."
+    task.async do |subtask|
+      begin
+        addresses = @@resolver.query(@name, Resolv::DNS::Resource::IN::MX)
+
+        if addresses.answer.first
+          @resolved_mx = addresses.answer.first.last.exchange.to_s
+        end
+
+      rescue StandardError => e
+        $logger.error "# Resolve MX failure for #{@name}. #{e} Retrying."
+      end
     end
 
-    begin           
-      @resolved_ns = resolver.getresources(@name, Resolv::DNS::Resource::IN::NS).first.name.to_s
-    rescue
-      #puts "# Resolve failure for #{@name}. Retrying."
+    task.async do |subtask|
+      begin           
+        addresses = @@resolver.query(@name, Resolv::DNS::Resource::IN::NS)
+        if addresses.answer.first
+          @resolved_ns = addresses.answer.first.last.name.to_s
+        end
+
+      rescue StandardError => e
+        $logger.error "# Resolve NS failure for #{@name}. #{e} Retrying."
+      end
     end
+
   end
   
   def get_popularity_google
@@ -146,29 +175,35 @@ class Typo
     rescue
       return 0
     rescue Timeout::Error
-      puts "# Timeout for #{@name}. Retrying"
+      $logger.error "# Timeout for #{@name}. Retrying"
       retry
     end
     return @popularity = r
   end
 
- def get_popularity_bing
+ def get_popularity_bing(task: Async::Task.current)
     return "" if !@valid_name
-    begin
-      http = Net::HTTP.new("www.bing.com");
-      req = Net::HTTP::Get.new("/search?q=%22#{@name}%22&qs=n&first=10&FORM=PERE&setlang=en-us&setmkt=", {"User-Agent" => "Wget/1.19.4 (linux-gnu)"})
-      res = http.request(req)
-      resp = res.body
-      r = resp.scan(/<span class="sb_count">([^<]+)/).flatten.first
-      puts "#{@name} - #{r}"
-      r = r.encode(Encoding.find('ASCII'), {:invalid => :replace, :undef=>:replace, :replace=>"" } ).split[2]
-      puts r
-    rescue
-      return 0
-    rescue Timeout::Error
-      puts "# Timeout for #{@name}. Retrying"
-      retry
-    end
+
+    #task.async do |subtask|
+
+      begin
+        http = Net::HTTP.new("www.bing.com");
+        req = Net::HTTP::Get.new("/search?q=%22#{@name}%22&qs=n&first=10&FORM=PERE&setlang=en-us&setmkt=", {"User-Agent" => "Wget/1.19.4 (linux-gnu)"})
+        res = http.request(req)
+        resp = res.body
+        r = resp.scan(/<span class="sb_count">([^<]+)/).flatten.first
+        $logger.debug "#{@name} - #{r}"
+        r = r.encode(Encoding.find('ASCII'), {:invalid => :replace, :undef=>:replace, :replace=>"" } ).split[2]
+        $logger.debug r
+      rescue
+        return 0
+      rescue Timeout::Error
+        $logger.error "# Timeout for #{@name}. Retrying"
+        retry
+      end
+    
+    #end
+
     return @popularity = r
   end
 end
@@ -741,14 +776,42 @@ puts_output output.hostnames_to_process
 # resolve popularity faster with threads
 $semaphore_countrylookup = Mutex.new
 
-threads=[]
-this_domain.typos.each { |typo|
-    threads << Thread.new(typo) { |thistypo|
-        typo.get_resolved if resolve_domains
-        thistypo.get_popularity_bing if check_popularity
-    }
-}
-threads.each { |aThread| aThread.join }
+
+n = 1
+Async do |task|
+
+  this_domain.typos.each do |typo|
+#        task.annotate "Starting on #{typo}"
+#        puts "starting on #{typo}"
+
+    typo.get_resolved if resolve_domains
+    typo.get_popularity_bing if check_popularity
+  end
+=begin
+  #stask.print_hierarchy($stderr)
+  puts "iteration: #{n}"
+  n+=1
+
+  #task.print_hierarchy($stderr)
+
+  if task.children
+    puts "Tasks: #{task.children.size}"
+    num_alive = task.children.select {|node| node.alive? }.size
+    num_stopped = task.children.select {|node| node.stopped? }.size
+
+    num_running = task.children.select {|node| node.running? }.size
+    num_finished = task.children.select {|node| node.finished? }.size
+    num_failed = task.children.select {|node| node.failed? }.size
+
+    puts "alive: #{num_alive}, stopped: #{num_stopped}, running: #{num_running}, finished: #{num_finished}, failed: #{num_failed}"
+  end
+
+  # Print out all running tasks in a tree:
+  #  
+=end
+end
+
 output.table 
 $output_filep.close if $output_filep
- 
+
+
