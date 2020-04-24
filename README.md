@@ -97,10 +97,10 @@ These typos are created by swapping the order of adjacent letters in the domain 
 ### Adjacent Character Replacement
 These typos are created by replacing each letter of the domain name with letters to the immediate left and right on the keyboard. For example, www.googke.com and www.goohle.com
 
-### Double Character Replacement.
+### Double Character Replacement
 These typos are created by replacing identical, consecutive letters of the domain name with letters to the immediate left and right on the keyboard. For example, www.gppgle.com and www.giigle.com
 
-### Adjacent Character Insertion.
+### Adjacent Character Insertion
 These typos are created by inserting letters to the immediate left and right on the keyboard of each letter. For example, www.googhle.com and www.goopgle.com
 
 ### Missing Dot
