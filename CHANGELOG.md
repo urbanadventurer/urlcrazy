@@ -16,6 +16,7 @@ New in Version 0.7 (April 2020)
 * Updated Country Database
 * Fixed whitespace indendation
 * Updated ASCII banner colours
+* Updated README
 
 
 New in Version 0.6 (September 2017)
