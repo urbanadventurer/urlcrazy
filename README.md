@@ -58,6 +58,9 @@ If you are using Ubuntu or Debian use:
 
 ## Usage
 
+![urlcrazy-usage](https://user-images.githubusercontent.com/101783/80223861-ecb94e80-8659-11ea-9a28-1fa59a4dfbb9.gif)
+
+
 ### Simple Usage
 
 `$ urlcrazy domain.com`
