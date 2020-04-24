@@ -60,6 +60,10 @@ ASYNC_DNS_SERVERS = [ [:udp, "8.8.8.8", 53],
                       [:udp, "209.244.0.4", 53],
                     ]
 
+
+PREFER_ASCIIART = nil #1
+PREFER_ASCII_COLOUR = nil# :red
+
 class Keyboard
   def initialize(layout)
     case layout
@@ -640,12 +644,11 @@ _______ ______ _____   ______
                                                 |_____|
 
 '       
-
-asciiart[ rand(asciiart.size) ]
+asciiart[ (PREFER_ASCIIART or rand(asciiart.size)) ]
 end
 
 def usage 
-    random_colour = [:red, :green, :blue, :yellow, :cyan ][ rand(5) ]
+    random_colour = (PREFER_ASCII_COLOUR or [:red, :green, :blue, :yellow, :cyan ][ rand(5) ])
     print_output banner.colorize( random_colour )
 
 print "URLCrazy version #{$VERSION} by Andrew Horton (urbanadventurer)
