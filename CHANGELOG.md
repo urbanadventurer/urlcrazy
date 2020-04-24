@@ -3,6 +3,7 @@ New in Version 0.7 (April 2020)
 ## Features
 * Now checks all country and International TLDs
 * Now checks all country SLDs
+* Added insert dashes Typo
 * Event-driven asynchronous DNS resolution with Async (https://github.com/socketry/async)
 * Added JSON output
 
