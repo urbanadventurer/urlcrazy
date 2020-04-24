@@ -155,30 +155,31 @@ class OutputCSV < Output
 end
 
 class OutputJSON < Output
-	# @domain.
+
 	def table
+		hash = { domain:@domain.domain,
+							extension:@domain.extension, 
+							tld:@domain.tld, 
+							typos:( 
+								@domain.typos.map do |typo| 
+								{ 
+									type:typo.type,
+									name:typo.name, 
+									valid_name:typo.valid_name,
+									popularity:typo.popularity,
+									resolved_a:typo.resolved_a,
+									resolved_ns:typo.resolved_ns,
+									resolved_mx:typo.resolved_mx,
+									country:(typo.country_a ? typo.country_a.last : nil),
+									country_code:(typo.country_a ? typo.country_a.first : nil),
+	#							  registered_name:typo.registered_name,
+	#								tld:typo.tld,
+									extension:typo.extension, 
+								} 
+							end)  
+						}
 
-=begin
-  	    headings = ["Typo Type","Typo","Valid","Pop","DNS-A","CC-A","DNS-MX","Extn"]
-
-		object = {  }
-
-		# make report
-		@domain.typos.each { |typo|
-				csv_string << [typo.type.to_s,
-				typo.name.to_s,
-				typo.valid_name.to_s,
-				(@check_popularity == true ? typo.popularity.to_s : "?"),
-				(@resolve_domains == true ? typo.resolved_a.to_s : "?" ),
-				(@resolve_domains == true and typo.country_a ? typo.country_a.join("|") : "?" ),
-				(@resolve_domains == true ? typo.resolved_mx.to_s : "?" ),
-				typo.extension.to_s]
-		}
-		puts csv_string.string
-
-	my_object = { :array => [1, 2, 3, { :sample => "hash"} ], :foo => "bar" }
-	puts JSON.pretty_generate(my_object)
-=end
+		puts hash.to_json
 	end
 
 end
