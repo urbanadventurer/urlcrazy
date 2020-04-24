@@ -16,11 +16,71 @@ If you have any questions, comments or concerns regarding URLCrazy, please consu
 ### Features
 * Generates 15 types of domain variants
 * Knows over 8000 common misspellings
-* Supports cosmic ray induced bit flipping
+* Supports bit flipping attacks
 * Multiple keyboard layouts (qwerty, azerty, qwertz, dvorak)
 * Checks if a domain variant is valid
 * Test if domain variants are in use
 * Estimate popularity of a domain variant
+
+
+## Installation
+
+### Install from a package manager
+
+If you are using Kali Linux, Ubuntu or Debian use:
+`$ sudo apt install urlcrazy`
+
+
+### Install latest release
+
+Visit https://github.com/urbanadventurer/urlcrazy/releases
+
+
+### Install current development version
+
+Be aware the latest development version may not be stable.
+`$ git clone https://github.com/urbanadventurer/urlcrazy.git`
+
+
+### Install Ruby
+
+URLCrazy has been tested with Ruby versions 2.4 and 2.6.
+
+If you are using Ubuntu or Debian use:
+`$ sudo apt install ruby`
+
+
+### Install Dependencies
+
+`$ bundle`
+
+
+## Usage
+
+### Simple Usage
+
+`$ urlcrazy domain.com`
+
+### With popularity estimate
+
+`$ urlcrazy -p domain.com`
+
+### Commandline Usage
+
+`
+Usage: ./urlcrazy [options] domain
+
+Options
+-k, --keyboard=LAYOUT  Options are: qwerty, azerty, qwertz, dvorak (default: qwerty)
+-p, --popularity       Check domain popularity with Google
+-r, --no-resolve       Do not resolve DNS
+-i, --show-invalid     Show invalid domain names
+-f, --format=TYPE      Human readable or CSV (default: human readable)
+-o, --output=FILE      Output file
+-n, --nocolor          Disable colour
+-h, --help             This help
+-v, --version          Print version information. This version is 0.7
+`
 
 
 ## Types of Domain Variations Supported
@@ -76,11 +136,6 @@ Uses an alternate, valid second level domain for the top level domain.
 For example, www.trademe.co.nz becomes www.trademe.ac.nz and www.trademe.iwi.nz
 
 
-## Tips
-
-The output will often be wider than the width of your terminal. If this bothers you, output your report to a file or increase the width of your terminal.
-
-
 ## Supported Keyboard Layouts
 
 Keyboard layouts supported are:
@@ -92,54 +147,72 @@ Keyboard layouts supported are:
 
 ## Is the domain valid?
 
-UrlCrazy has a database of valid top level and second level domains. This information has been compiled from Wikipedia and domain registrars. We know whether a domain is valid by checking if it matches toplevel and second level domains. For example, www.trademe.co.bz is a valid domain in Belize which allows any second level domain registrations but www.trademe.xo.nz isn't because xo.nz isn't an allowed second level domain in New Zealand.
+URLCrazy has a database of valid top level and second level domains. This information has been compiled from Wikipedia and domain registrars. We know whether a domain is valid by checking if it matches toplevel and second level domains. For example, www.trademe.co.bz is a valid domain in Belize which allows any second level domain registrations but www.trademe.xo.nz isn't because xo.nz isn't an allowed second level domain in New Zealand.
 
 
 ## Popularity Estimate
 
-We can estimate the relative popularity of a typo by measuring how often that typo appears on webpages. Querying goole.com for the number of search results for a typo gives us a indication of how popular a typo is.
+URLCrazy pioneered the technique of estimating the relative popularity of a typo from search engine results data. By measuring how many times a typo appears in webpages, we can estimate how popular that typo will be made when users type in a URL.
 
-The drawback of this approach is that you need to manually identify and omit legitimate domains such as googles.com
+The inherent limitation of this technique, is that a typo for one domain, can be a legitimate domain in its own right. For example, googles.com is a typo of google.com but it also a legitimate domain.
 
 For example, consider the following typos for google.com.
-25424 gogle.com
-24031 googel.com
-22490 gooogle.com
-19172 googles.com
-19148 goole.com
-18855 googl.com
-17842 ggoogle.com
+
+| Count. | Typo         |
+| ------ | ------------ |
+| 25424  | gogle.com    |
+| 24031  | googel.com   |
+| 22490  | gooogle.com  |
+| 19172  | googles.com  |
+| 19148  | goole.com    |
+| 18855  | googl.com    |
+| 17842  | ggoogle.com  |
 
 
-## IP Address
 
-An IP address for a typo domainname indicates it is in use.
+## URLCrazy Appearances
 
-Tip: An IP repeating for multiple typos or IPs in a close range shows common ownership. For example, gogle.com, gogole.com and googel.com all resolve to 64.233.161.104 which is owned by Google.
+### Kali Linux
+URLCrazy was a default tool in BackTrack 5, and later Kali Linux.
+https://tools.kali.org/information-gathering/urlcrazy
 
+### The Browser Hacker's Handbook
+Authored by Wade Alcorn, Christian Frichot, and Michele Orru.
 
-## Country Code Database
+URLCrazy is included in Chapter 2 of this seminal work on the topic.
 
-- http://en.wikipedia.org/wiki/Top-level_domain
-- http://en.wikipedia.org/wiki/Country_code_top-level_domain
+### PTES Technical Guidelines
+Penetration Testing Execution Standard (PTES) is a standard designed to provide a common language and scope for performing penetration testing (i.e. Security evaluations). URLCrazy is included in the Tools Required section.
 
-2nd level domains here:
-- http://www.iana.org/domains/root/db/
+http://www.pentest-standard.org/index.php/PTES_Technical_Guidelines
 
 
 ## See Also
 
-- http://en.wikipedia.org/wiki/Wikipedia:AutoWikiBrowser/Typos
-- http://en.wikipedia.org/wiki/Wikipedia:Typo
-- http://en.wikipedia.org/wiki/Typosquatting
+URLCrazy was first published in 2009, and for many years was the most advanced opensource tool for studying typosquatting. Since then multiple other tools have been developed by the infosec community.
 
-Strider is tool with similar aims and is produced by Microsoft http://research.microsoft.com/csm/strider/
+### DNSTwist
 
+DNSTwist is developed by Marcin Ulikowski and first published in 2015. DNSTwist had a significant feature overlap with URLCrazy at the time, and introduced many new features.
 
-## Installation
+Language: Python
 
-URLCrazy requires ruby. If you are using Ubuntu or Debian try:
-`sudo apt install ruby.`
+https://github.com/elceef/dnstwist
+
+### URLInsane
+
+URLInsane was developed by Rangertaha in 2018 and claims to match the features of URLCrazy and DNSTwist.
+
+Language: Go
+
+https://github.com/cybint/urlinsane
+
+### DomainFuzz
+
+DomainFuzz was developed by monkeym4sterin 2017.
+Language: Node.JS
+
+https://github.com/monkeym4ster/DomainFuzz
 
 
 ## Authors and Acknowledgement
@@ -148,6 +221,7 @@ URLCrazy requires ruby. If you are using Ubuntu or Debian try:
 - Thanks to Ruby on Rails for Inflector which allows plural and singular permutations.
 - Thanks to Wikipedia for the set of common misspellings, homophones, and homoglyphs.
 - Thanks to software77.net for their IP to country database
+
 
 ## License
 
