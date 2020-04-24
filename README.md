@@ -169,6 +169,19 @@ For example, consider the following typos for google.com.
 | 17842  | ggoogle.com  |
 
 
+## Known Issues
+
+### Macos File Descriptor Limit
+If DNS resolution fails under Macos it could be due to the small default file descriptor limit.
+
+To display the current file descriptor limit use:
+
+`$ ulimit -a`
+
+To increase the file descriptor limit use:
+
+`$ ulimit -n 10000`
+
 
 ## URLCrazy Appearances
 
