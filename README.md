@@ -4,16 +4,14 @@ URLCrazy is an OSINT tool to generate and test domain typos or variations to det
 
 Homepage:  https://www.morningstarsecurity.com/research/urlcrazy
 
-If you have any questions, comments or concerns regarding URLCrazy, please consult the documentation prior to contacting one of the developers. Your feedback is always welcome.
 
-
-### Use Cases
+## Use Cases
 * Detect typo squatters profiting from typos on your domain name
 * Protect your brand by registering popular typos
 * Identify typo domain names that will receive traffic intended for another domain
 * Conduct phishing attacks during a penetration test
 
-### Features
+## Features
 * Generates 15 types of domain variants
 * Knows over 8000 common misspellings
 * Supports bit flipping attacks
@@ -28,6 +26,7 @@ If you have any questions, comments or concerns regarding URLCrazy, please consu
 ### Install from a package manager
 
 If you are using Kali Linux, Ubuntu or Debian use:
+
 `$ sudo apt install urlcrazy`
 
 
@@ -39,6 +38,7 @@ Visit https://github.com/urbanadventurer/urlcrazy/releases
 ### Install current development version
 
 Be aware the latest development version may not be stable.
+
 `$ git clone https://github.com/urbanadventurer/urlcrazy.git`
 
 
@@ -47,6 +47,7 @@ Be aware the latest development version may not be stable.
 URLCrazy has been tested with Ruby versions 2.4 and 2.6.
 
 If you are using Ubuntu or Debian use:
+
 `$ sudo apt install ruby`
 
 
@@ -67,7 +68,7 @@ If you are using Ubuntu or Debian use:
 
 ### Commandline Usage
 
-`
+```
 Usage: ./urlcrazy [options] domain
 
 Options
@@ -80,8 +81,7 @@ Options
 -n, --nocolor          Disable colour
 -h, --help             This help
 -v, --version          Print version information. This version is 0.7
-`
-
+```
 
 ## Types of Domain Variations Supported
 
@@ -139,11 +139,11 @@ For example, www.trademe.co.nz becomes www.trademe.ac.nz and www.trademe.iwi.nz
 ## Supported Keyboard Layouts
 
 Keyboard layouts supported are:
-	* QWERTY
-	* AZERTY
-	* QWERTZ
-	* DVORAK
 
+* QWERTY
+* AZERTY
+* QWERTZ
+* DVORAK
 
 ## Is the domain valid?
 
@@ -221,6 +221,10 @@ https://github.com/monkeym4ster/DomainFuzz
 - Thanks to Ruby on Rails for Inflector which allows plural and singular permutations.
 - Thanks to Wikipedia for the set of common misspellings, homophones, and homoglyphs.
 - Thanks to software77.net for their IP to country database
+
+## Community
+
+If you have any questions, comments or concerns regarding URLCrazy, please consult the documentation prior to contacting one of the developers. Your feedback is always welcome.
 
 
 ## License
