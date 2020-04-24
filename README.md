@@ -62,10 +62,13 @@ If you are using Ubuntu or Debian use:
 
 ![urlcrazy-usage](https://user-images.githubusercontent.com/101783/80223861-ecb94e80-8659-11ea-9a28-1fa59a4dfbb9.gif)
 
-
 ### Simple Usage
 
-`$ urlcrazy domain.com`
+With default options, URLCrazy will check over 2000 typo variants for google.com.
+
+`$ urlcrazy google.com`
+
+![urlcrazy-google](https://user-images.githubusercontent.com/101783/80225970-d95bb280-865c-11ea-86e2-cdf418b0be56.gif)
 
 ### With popularity estimate
 
