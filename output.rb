@@ -48,8 +48,17 @@ class OutputHuman < Output
 				columns[2] << typo.valid_name.to_s
 				columns[3] << (@check_popularity == true ? typo.popularity.to_s : "?")				
 				columns[4] << (@resolve_domains == true ? typo.resolved_a.to_s : "?" )
-				# fix country ()
-				columns[5] << (@resolve_domains == true and typo.country_a ? "#{typo.country_a.last} (#{typo.country_a.first})" : "?" )
+
+				columns[5] << if @resolve_domains == true
+					if !typo.country_a.nil? and typo.country_a.any?
+						"#{typo.country_a.last} (#{typo.country_a.first})"
+					else
+						"?"
+					end
+				else
+					"?"
+				end
+
 				columns[6] << (@resolve_domains == true ? typo.resolved_ns.to_s : "?" )
 				columns[7] << (@resolve_domains == true ? typo.resolved_mx.to_s : "?" )				
 				#columns[7] << typo.extension.to_s
