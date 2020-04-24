@@ -273,7 +273,21 @@ class Domainname
         t.name = c
         @typos << t
     }
-    
+=begin
+    self.insert_dot.sort.uniq.each {|c|
+        t=Typo.new
+        t.type = "Insert Dot"
+        t.name = c
+        @typos << t
+    }
+=end
+    self.insert_dash.sort.uniq.each {|c|
+        t=Typo.new
+        t.type = "Insert Dash"
+        t.name = c
+        @typos << t
+    }
+
     self.stripdashes.sort.uniq.each {|c|
         t = Typo.new
         t.type = "Strip Dashes"
@@ -460,6 +474,15 @@ class Domainname
     list.each {|d| d << ".com" if !d.include?(".") }
   end
 
+  # this needs some work as it returns FQDN and not domains
+  def insert_dot
+    (0..@domain.length-2).map { |i|  @domain[0..i].to_s + "." + @domain[i+1..@domain.length] }
+  end
+
+  def insert_dash
+    (0..@domain.length-2).map { |i|  @domain[0..i].to_s + "-" + @domain[i+1..@domain.length] }
+  end
+
   def stripdashes
     [@domain.delete("-")]
   end
@@ -633,9 +656,9 @@ phishing, and corporate espionage.
 
 Supports the following domain variations:
 Character omission, character repeat, adjacent character swap, adjacent character replacement, double 
-character replacement, adjacent character insertion, missing dot, strip dashes, singular or pluralise,
-common misspellings, vowel swaps, homophones, bit flipping (cosmic rays), homoglyphs, wrong top level 
-domain, and wrong second level domain.
+character replacement, adjacent character insertion, missing dot, strip dashes, insert dash,
+singular or pluralise, common misspellings, vowel swaps, homophones, bit flipping (cosmic rays),
+homoglyphs, wrong top level domain, and wrong second level domain.
 
 Usage: #{$0} [options] domain
 
