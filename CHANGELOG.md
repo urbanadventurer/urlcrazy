@@ -1,4 +1,4 @@
-New in Version 0.7 (April 2020)
+New in Version 0.7 (24 April 2020)
 
 ## Features
 * Now checks all country and International TLDs
