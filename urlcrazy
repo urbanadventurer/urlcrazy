@@ -759,7 +759,7 @@ begin
             puts "Cannot write to output file, #{output_filename}"
             exit 1
         end
-    when '-V','--version'
+    when '-v','--version'
         puts $VERSION; exit
     end
 end
