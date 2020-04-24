@@ -53,7 +53,7 @@ class OutputHuman < Output
 					if !typo.country_a.nil? and typo.country_a.any?
 						"#{typo.country_a.last} (#{typo.country_a.first})"
 					else
-						"?"
+						""
 					end
 				else
 					"?"
