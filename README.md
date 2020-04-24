@@ -1,3 +1,5 @@
+[![License](https://img.shields.io/badge/license-Restricted-orange.svg)](https://raw.githubusercontent.com/urbanadventurer/urlcrazy/master/README.md) ![Stable Release](https://img.shields.io/badge/stable_release-0.6-blue.svg) [![Repositories](https://repology.org/badge/tiny-repos/urlcrazy.svg)](https://repology.org/project/urlcrazy/versions)
+
 # URLCrazy
 
 URLCrazy is an OSINT tool to generate and test domain typos or variations to detect or perform typo squatting, URL hijacking, phishing, and corporate espionage.
