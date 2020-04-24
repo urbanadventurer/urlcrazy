@@ -644,7 +644,7 @@ Options
 -p, --popularity       Check domain popularity with Google
 -r, --no-resolve       Do not resolve DNS
 -i, --show-invalid     Show invalid domain names
--f, --format=TYPE      Human readable or CSV (default: human readable)
+-f, --format=TYPE      Human readable, JSON, or CSV (default: human readable)
 -o, --output=FILE      Output file
 -n, --nocolor          Disable colour
 -h, --help             This help
