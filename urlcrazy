@@ -46,7 +46,7 @@ require 'output.rb'
 
 
 $logger = Logger.new(STDOUT)
-$logger.level = Logger::DEBUG
+$logger.level = Logger::FATAL # Logger::DEBUG
 
 
 $VERSION = "0.7"
