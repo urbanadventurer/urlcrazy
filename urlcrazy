@@ -25,7 +25,7 @@ require 'async'
 require 'async/dns'
 require 'async/http'
 require 'logger'
-#require 'pry'
+require 'pry'
 
 # add the directory of the file currently being executed to the load path
 $LOAD_PATH.unshift(File.expand_path(File.dirname(__FILE__))) unless
