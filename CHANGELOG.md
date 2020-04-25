@@ -5,6 +5,7 @@ New in Version 0.7.1 (26 April 2020)
 
 ## Bug Fixes
 * No longer requires pry gem unless debugging
+* Checks for a low ulimit and shows a warning
 
 ## Misc
 * Fixed typo in README
