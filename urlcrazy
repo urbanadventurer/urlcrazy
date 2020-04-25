@@ -28,6 +28,21 @@ require 'async/http'
 require 'logger'
 require 'pry' if $DEBUG
 
+$logger = Logger.new(STDOUT)
+
+if $DEBUG
+  $logger.level = Logger::DEBUG
+else
+  $logger.level = Logger::FATAL
+end
+
+# raise ulimit
+current_ulimit = `ulimit -n`
+if current_ulimit != "unlimited" and current_ulimit.to_i < 10000
+  puts "Warning. Ulimit may be too low. Check with `ulimit -a` and changed with `ulimit -n 10000`"
+end
+
+
 # add the directory of the file currently being executed to the load path
 $LOAD_PATH.unshift(File.expand_path(File.dirname(__FILE__))) unless
 $:.include?(File.dirname(__FILE__)) || $LOAD_PATH.include?(File.expand_path(File.dirname(__FILE__)))
@@ -45,14 +60,6 @@ require 'homophones.rb'
 require 'country.rb'
 require 'output.rb'
 
-
-$logger = Logger.new(STDOUT)
-
-if $DEBUG
-  $logger.level = Logger::DEBUG
-else
-  $logger.level = Logger::FATAL
-end
 
 $VERSION = "0.7.1"
 # DNS_SERVERS = %w| 8.8.8.8 8.8.4.4 64.6.64.6 64.6.65.6 209.244.0.3 209.244.0.4 |

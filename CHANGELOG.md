@@ -8,6 +8,7 @@ New in Version 0.7.1 (26 April 2020)
 
 ## Misc
 * Fixed typo in README
+* Updated Installation instructions
 
 
 New in Version 0.7 (24 April 2020)
