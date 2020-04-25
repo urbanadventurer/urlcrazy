@@ -52,10 +52,15 @@ If you are using Ubuntu or Debian use:
 
 `$ sudo apt install ruby`
 
+### Install Bundler
+
+Bundler provides dependecy management for Ruby projects
+
+`$ gem install bundler`
 
 ### Install Dependencies
 
-`$ bundle`
+`$ bundle install`
 
 
 ## Usage
