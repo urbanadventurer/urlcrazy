@@ -1,3 +1,15 @@
+New in Version 0.7.1 (26 April 2020)
+
+## Features
+* Added --debug to show debugging output for development
+
+## Bug Fixes
+* No longer requires pry gem unless debugging
+
+## Misc
+* Fixed typo in README
+
+
 New in Version 0.7 (24 April 2020)
 
 ## Features
@@ -20,7 +32,7 @@ New in Version 0.7 (24 April 2020)
 * Updated ASCII banner colours
 * Updated README
 
-
+  
 New in Version 0.6 (September 2017)
 
 ## Background
