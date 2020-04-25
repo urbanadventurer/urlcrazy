@@ -36,12 +36,11 @@ else
   $logger.level = Logger::FATAL
 end
 
-# raise ulimit
-current_ulimit = `ulimit -n`
+# Check the ulimit
+current_ulimit = `sh -c "ulimit -n"`
 if current_ulimit != "unlimited" and current_ulimit.to_i < 10000
-  puts "Warning. Ulimit may be too low. Check with `ulimit -a` and changed with `ulimit -n 10000`"
+  puts "Warning. Ulimit may be too low. Check with `ulimit -a` and change with `ulimit -n 10000`"
 end
-
 
 # add the directory of the file currently being executed to the load path
 $LOAD_PATH.unshift(File.expand_path(File.dirname(__FILE__))) unless
