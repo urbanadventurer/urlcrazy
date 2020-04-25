@@ -678,6 +678,7 @@ Options
 -f, --format=TYPE      Human readable, JSON, or CSV (default: human readable)
 -o, --output=FILE      Output file
 -n, --nocolor          Disable colour
+-d, --debug            Enable debugging output for development
 -h, --help             This help
 -v, --version          Print version information. This version is #{$VERSION}
 
@@ -722,6 +723,7 @@ opts = GetoptLong.new(
   [ '--output','-o', GetoptLong::REQUIRED_ARGUMENT ],
   [ '--format','-f', GetoptLong::REQUIRED_ARGUMENT ],
   [ '--only-resolve','-R', GetoptLong::NO_ARGUMENT ],
+  [ '--debug','-d', GetoptLong::NO_ARGUMENT ],
   [ '--nocolor','-n', GetoptLong::NO_ARGUMENT ],
   [ '-v','--version', GetoptLong::NO_ARGUMENT ]
   )
@@ -764,6 +766,9 @@ begin
             puts "Cannot write to output file, #{output_filename}"
             exit 1
         end
+    when '--debug','-d'
+        $DEBUG = true
+        $logger.level = Logger::DEBUG
     when '-v','--version'
         puts $VERSION; exit
     end
