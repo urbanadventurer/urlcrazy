@@ -62,6 +62,10 @@ Bundler provides dependecy management for Ruby projects
 
 `$ bundle install`
 
+Alternatively, if you don't want to install bundler, the following command will install the gem dependencies.
+
+`$ gem install json colorize async async-dns async-http`
+
 
 ## Usage
 
