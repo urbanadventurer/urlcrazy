@@ -155,7 +155,7 @@ Keyboard layouts supported are:
 
 ## Is the domain valid?
 
-URLCrazy has a database of valid top level and second level domains. This information has been compiled from Wikipedia and domain registrars. We know whether a domain is valid by checking if it matches toplevel and second level domains. For example, www.trademe.co.bz is a valid domain in Belize which allows any second level domain registrations but www.trademe.xo.nz isn't because xo.nz isn't an allowed second level domain in New Zealand.
+URLCrazy has a database of valid top level and second level domains. This information has been compiled from Wikipedia and domain registrars. We know whether a domain is valid by checking if it matches top level and second level domains. For example, www.trademe.co.bz is a valid domain in Belize which allows any second level domain registrations but www.trademe.xo.nz isn't because xo.nz isn't an allowed second level domain in New Zealand.
 
 
 ## Popularity Estimate
