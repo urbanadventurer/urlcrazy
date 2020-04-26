@@ -11,22 +11,31 @@
 # License: Copyright Andrew Horton, 2012-2020. You have permission to use and distribute this software. You do not have permission to distribute modified versions without permission. You do not have permission to use this as part of a commercial service unless it forms part of a penetration testing service. For example a commercial service that provides domain protection for clients must obtain a license first. Email me if you require a license.
 $DEBUG = false
 
-require 'rubygems'
-require 'getoptlong'
-require 'singleton'
-require 'pp'
-require 'socket'
-require 'net/http'
-require 'resolv'
-require 'resolv-replace'
-require 'csv'
-require 'json'
-require 'colorize'
-require 'async'
-require 'async/dns'
-require 'async/http'
-require 'logger'
-require 'pry' if $DEBUG
+begin
+  require 'rubygems'
+  require 'getoptlong'
+  require 'singleton'
+  require 'pp'
+  require 'socket'
+  require 'net/http'
+  require 'resolv'
+  require 'resolv-replace'
+  require 'csv'
+  require 'json'
+  require 'colorize'
+  require 'async'
+  require 'async/dns'
+  require 'async/http'
+  require 'logger'
+  require 'pry' if $DEBUG
+rescue LoadError
+  banner
+  puts "URLCrazy dependencies are not installed."
+  puts "To install the dependencies, copy and paste the following command, or check the Installation section of the README.md file."
+  puts "`$ bundle install`\n\n"
+  exit 1
+end
+
 
 $logger = Logger.new(STDOUT)
 
