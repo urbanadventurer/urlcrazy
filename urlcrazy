@@ -764,14 +764,14 @@ begin
     when '--output','-o'
         output_filename = arg
         String.disable_colorization = true
-    when '--nocolor','-n'
-        String.disable_colorization = true
         begin
             $output_filep = File.new(output_filename,"w")           
         rescue
             puts "Cannot write to output file, #{output_filename}"
             exit 1
         end
+    when '--nocolor','-n'
+        String.disable_colorization = true
     when '--debug','-d'
         $DEBUG = true
         $logger.level = Logger::DEBUG
@@ -818,7 +818,6 @@ end
 puts_output output.hostnames_to_process
 # resolve popularity faster with threads
 $semaphore_countrylookup = Mutex.new
-
 
 n = 1
 Async do |task|

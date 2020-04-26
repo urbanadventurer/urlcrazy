@@ -150,7 +150,7 @@ class OutputCSV < Output
 								typo.resolved_mx.to_s,
 								typo.extension.to_s]
 		end
-		puts csv_string.string
+		puts_output csv_string.string
 	end
 end
 
@@ -179,7 +179,7 @@ class OutputJSON < Output
 							end)  
 						}
 
-		puts hash.to_json
+		puts_output hash.to_json
 	end
 
 end
