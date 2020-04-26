@@ -217,7 +217,7 @@ class Typo
         resp = res.body
         r = resp.scan(/<span class="sb_count">([^<]+)/).flatten.first
         $logger.debug "#{@name} - #{r}"
-        r = r.encode(Encoding.find('ASCII'), {:invalid => :replace, :undef=>:replace, :replace=>"" } ).split[2]
+        r = r.encode(Encoding.find('ASCII'), :invalid => :replace, :undef=>:replace, :replace=>""  ).split[2]
         $logger.debug r
       rescue
         return 0
