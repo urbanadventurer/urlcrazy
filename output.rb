@@ -133,7 +133,7 @@ class OutputCSV < Output
 
 	    headings = ["Typo Type","Typo","Valid","Pop","DNS-A","Country","CountryCode","DNS-NS","DNS-MX","Extn"]
 
-		csv_string = CSV.new("",{ col_sep: ',', headers: true, force_quotes: true })
+		csv_string = CSV.new("", col_sep: ',', headers: true, force_quotes: true )
 
  		csv_string << headings
 	
