@@ -26,6 +26,7 @@ begin
   require 'async'
   require 'async/dns'
   require 'async/http'
+  require 'async/http/internet'
   require 'logger'
   require 'pry' if $DEBUG
 rescue LoadError
@@ -208,28 +209,48 @@ class Typo
  def get_popularity_bing(task: Async::Task.current)
     return "" if !@valid_name
 
-    #task.async do |subtask|
-
+    r = nil
+=begin
+    task.async do |subtask|
       begin
-        http = Net::HTTP.new("www.bing.com");
-        req = Net::HTTP::Get.new("/search?q=%22#{@name}%22&qs=n&first=10&FORM=PERE&setlang=en-us&setmkt=", {"User-Agent" => "Wget/1.19.4 (linux-gnu)"})
-        res = http.request(req)
-        resp = res.body
-        r = resp.scan(/<span class="sb_count">([^<]+)/).flatten.first
+        internet = Async::HTTP::Internet.new
+        response = internet.get("https://www.bing.com/search?q=%22#{@name}%22&qs=n&first=10&FORM=PERE&setlang=en-us&setmkt=", {"User-Agent" => "Wget/1.19.4 (linux-gnu)"})
+        body = response.read
+        r = body.scan(/<span class="sb_count">([^<]+)/).flatten.first
         $logger.debug "#{@name} - #{r}"
         r = r.encode(Encoding.find('ASCII'), :invalid => :replace, :undef=>:replace, :replace=>""  ).split[2]
         $logger.debug r
       rescue
-        return 0
+        #
       rescue Timeout::Error
-        $logger.error "# Timeout for #{@name}. Retrying"
+       $logger.error "# Timeout for #{@name}. Retrying"
         retry
+      ensure
+        internet.close
       end
-    
-    #end
-
+    end
+=end
+  
+    begin
+      http = Net::HTTP.new("www.bing.com");
+      req = Net::HTTP::Get.new("/search?q=%22#{@name}%22&qs=n&first=10&FORM=PERE&setlang=en-us&setmkt=", {"User-Agent" => "Wget/1.19.4 (linux-gnu)"})
+      res = http.request(req)
+      resp = res.body
+      r = resp.scan(/<span class="sb_count">([^<]+)/).flatten.first
+      $logger.debug "#{@name} - #{r}"
+      r = r.encode(Encoding.find('ASCII'), :invalid => :replace, :undef=>:replace, :replace=>""  ).split[2]
+      $logger.debug r
+    rescue
+    rescue Timeout::Error
+      $logger.error "# Timeout for #{@name}. Retrying"
+      retry
+    end
+  
+#=end
     return @popularity = r
   end
+
+
 end
 
 class Domainname
