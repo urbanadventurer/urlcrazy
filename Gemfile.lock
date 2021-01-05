@@ -20,7 +20,7 @@ GEM
       async (~> 1.8)
     colorize (0.8.1)
     console (1.8.2)
-    json (2.0.2)
+    json (2.3.0)
     nio4r (2.5.2)
     protocol-hpack (1.4.2)
     protocol-http (0.15.1)
