@@ -1,7 +1,7 @@
-New in Version 0.7.2
+New in Version 0.7.2 (5 January 2021)
 
 ## Bug Fixes
-* Fix bug where output to a file didn't work
+* Fixed #6 bug where output to a file didn't work
 
 ## Misc
 * Check gem dependecies are installed, and show a message if they are not

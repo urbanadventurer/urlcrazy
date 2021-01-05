@@ -30,7 +30,7 @@ begin
   require 'logger'
   require 'pry' if $DEBUG
 rescue LoadError
-  banner
+  #banner
   puts "URLCrazy dependencies are not installed."
   puts "To install the dependencies, copy and paste the following command, or check the Installation section of the README.md file."
   puts "`$ bundle install`\n\n"
