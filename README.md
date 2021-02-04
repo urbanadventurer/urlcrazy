@@ -4,7 +4,7 @@
 
 URLCrazy is an OSINT tool to generate and test domain typos or variations to detect or perform typo squatting, URL hijacking, phishing, and corporate espionage.
 
-Homepage:  https://www.morningstarsecurity.com/research/urlcrazy
+Homepage:  https://morningstarsecurity.com/research/urlcrazy
 
 
 ## Use Cases

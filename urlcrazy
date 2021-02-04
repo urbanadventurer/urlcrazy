@@ -693,7 +693,7 @@ def usage
     print_output banner.colorize( random_colour )
 
 print "URLCrazy version #{$VERSION} by Andrew Horton (urbanadventurer)
-Visit http://www.morningstarsecurity.com/research/urlcrazy
+Visit https://morningstarsecurity.com/research/urlcrazy
 
 Generate and test domain typos and variations to detect and perform typo squatting, URL hijacking,
 phishing, and corporate espionage.
