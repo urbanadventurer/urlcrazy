@@ -4,7 +4,7 @@ New in Version 0.7.2 (5 January 2021)
 * Fixed #6 bug where output to a file didn't work
 
 ## Misc
-* Check gem dependecies are installed, and show a message if they are not
+* Check gem dependencies are installed, and show a message if they are not
 
 
 New in Version 0.7.1 (26 April 2020)
