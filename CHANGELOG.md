@@ -1,3 +1,12 @@
+New in Version 0.7.3 (14 April 2021)
+
+## Bug Fixes
+* Added Gemfile.lock to the .gitignore.
+
+## Misc
+* Added .gitignore to repo
+
+
 New in Version 0.7.2 (5 January 2021)
 
 ## Bug Fixes
