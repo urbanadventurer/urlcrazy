@@ -6,7 +6,6 @@ URLCrazy is an OSINT tool to generate and test domain typos or variations to det
 
 Homepage:  https://morningstarsecurity.com/research/urlcrazy
 
-
 ## Use Cases
 * Detect typo squatters profiting from typos on your domain name
 * Protect your brand by registering popular typos
@@ -86,6 +85,26 @@ With default options, URLCrazy will check over 2000 typo variants for google.com
 ### Commandline Usage
 
 ```
+
+db    db d8888b. db       .o88b. d8888b.  .d8b.  d88888D db    db
+88    88 88  `8D 88      d8P  Y8 88  `8D d8' `8b YP  d8' `8b  d8'
+88    88 88oobY' 88      8P      88oobY' 88ooo88    d8'   `8bd8'
+88    88 88`8b   88      8b      88`8b   88~~~88   d8'      88
+88b  d88 88 `88. 88booo. Y8b  d8 88 `88. 88   88  d8' db    88
+~Y8888P' 88   YD Y88888P  `Y88P' 88   YD YP   YP d88888P    YP
+
+URLCrazy version 0.7.3 by Andrew Horton (urbanadventurer)
+Visit https://morningstarsecurity.com/research/urlcrazy
+
+Generate and test domain typos and variations to detect and perform typo squatting, URL hijacking,
+phishing, and corporate espionage.
+
+Supports the following domain variations:
+Character omission, character repeat, adjacent character swap, adjacent character replacement, double
+character replacement, adjacent character insertion, missing dot, strip dashes, insert dash,
+singular or pluralise, common misspellings, vowel swaps, homophones, bit flipping (cosmic rays),
+homoglyphs, wrong top level domain, and wrong second level domain.
+
 Usage: ./urlcrazy [options] domain
 
 Options
@@ -93,11 +112,12 @@ Options
 -p, --popularity       Check domain popularity with Google
 -r, --no-resolve       Do not resolve DNS
 -i, --show-invalid     Show invalid domain names
--f, --format=TYPE      Human readable or CSV (default: human readable)
+-f, --format=TYPE      Human readable, JSON, or CSV (default: human readable)
 -o, --output=FILE      Output file
 -n, --nocolor          Disable colour
+-d, --debug            Enable debugging output for development
 -h, --help             This help
--v, --version          Print version information. This version is 0.7
+-v, --version          Print version information. This version is 0.7.3
 ```
 
 ## Types of Domain Variations Supported
