@@ -1,28 +1,29 @@
-[![License](https://img.shields.io/badge/license-Restricted-blue.svg)](https://raw.githubusercontent.com/urbanadventurer/urlcrazy/master/README.md) ![Stable Release](https://img.shields.io/badge/stable_release-0.7.1-blue.svg) [![Repositories](https://repology.org/badge/tiny-repos/urlcrazy.svg)](https://repology.org/project/urlcrazy/versions)
+[![License](https://img.shields.io/badge/license-Restricted-blue.svg)](https://raw.githubusercontent.com/urbanadventurer/urlcrazy/master/README.md) ![Stable Release](https://img.shields.io/badge/stable_release-0.7.3-blue.svg) [![Repositories](https://repology.org/badge/tiny-repos/urlcrazy.svg)](https://repology.org/project/urlcrazy/versions)
 
-# URLCrazy
+# 🚀 URLCrazy
 
 URLCrazy is an OSINT tool to generate and test domain typos or variations to detect or perform typo squatting, URL hijacking, phishing, and corporate espionage.
 
 Homepage:  https://morningstarsecurity.com/research/urlcrazy
 
-## Use Cases
+## 🌟 Use Cases
 * Detect typo squatters profiting from typos on your domain name
 * Protect your brand by registering popular typos
 * Identify typo domain names that will receive traffic intended for another domain
 * Conduct phishing attacks during a penetration test
 
-## Features
+## ⭐ Features
 * Generates 15 types of domain variants
 * Knows over 8000 common misspellings
-* Supports bit flipping attacks
-* Multiple keyboard layouts (qwerty, azerty, qwertz, dvorak)
+* Over 1500 Top Level Domains supported
+* Bit-flipping attacks
+* Multiple keyboard layouts (QWERTY, AZERTY, QWERTY, DVORAK)
 * Checks if a domain variant is valid
 * Test if domain variants are in use
 * Estimate popularity of a domain variant
 
 
-## Installation
+## 🛠 Installation
 
 ### Install from a package manager
 
@@ -66,7 +67,7 @@ Alternatively, if you don't want to install bundler, the following command will 
 `$ gem install json colorize async async-dns async-http`
 
 
-## Usage
+## 💻 Usage
 
 ![urlcrazy-usage](https://user-images.githubusercontent.com/101783/80223861-ecb94e80-8659-11ea-9a28-1fa59a4dfbb9.gif)
 
@@ -120,7 +121,7 @@ Options
 -v, --version          Print version information. This version is 0.7.3
 ```
 
-## Types of Domain Variations Supported
+## 🔦 Types of Domain Variations Supported
 
 ### Character Omission
 These typos are created by leaving out a letter of the domain name, one letter at a time. For example, www.goole.com and www.gogle.com
@@ -173,7 +174,7 @@ Uses an alternate, valid second level domain for the top level domain.
 For example, www.trademe.co.nz becomes www.trademe.ac.nz and www.trademe.iwi.nz
 
 
-## Supported Keyboard Layouts
+## ⌨ Supported Keyboard Layouts
 
 Keyboard layouts supported are:
 
@@ -182,12 +183,12 @@ Keyboard layouts supported are:
 * QWERTZ
 * DVORAK
 
-## Is the domain valid?
+## 🕯 Is the domain valid?
 
 URLCrazy has a database of valid top level and second level domains. This information has been compiled from Wikipedia and domain registrars. We know whether a domain is valid by checking if it matches top level and second level domains. For example, www.trademe.co.bz is a valid domain in Belize which allows any second level domain registrations but www.trademe.xo.nz isn't because xo.nz isn't an allowed second level domain in New Zealand.
 
 
-## Popularity Estimate
+## 💡 Popularity Estimate
 
 URLCrazy pioneered the technique of estimating the relative popularity of a typo from search engine results data. By measuring how many times a typo appears in webpages, we can estimate how popular that typo will be made when users type in a URL.
 
@@ -206,9 +207,9 @@ For example, consider the following typos for google.com.
 | 17842  | ggoogle.com  |
 
 
-## Known Issues
+## 💣  Known Issues
 
-### Macos File Descriptor Limit
+### MacOS File Descriptor Limit
 If DNS resolution fails under Macos it could be due to the small default file descriptor limit.
 
 To display the current file descriptor limit use:
@@ -219,8 +220,11 @@ To increase the file descriptor limit use:
 
 `$ ulimit -n 10000`
 
+### No WHOIS checking
+This tool does not check if a domain has been registered. This is due to WHOIS servers enforcing rate-limiting and banning IP addresses.
 
-## URLCrazy Appearances
+
+## 👏 URLCrazy Appearances
 
 ### Kali Linux
 URLCrazy was a default tool in BackTrack 5, and later Kali Linux.
@@ -242,7 +246,7 @@ Network Security Toolkit is a bootable Linux distribution designed to provide ea
 https://www.networksecuritytoolkit.org/
 
 
-## See Also
+## 📚 Other Projects
 
 URLCrazy was first published in 2009, and for many years was the most advanced opensource tool for studying typosquatting. Since then multiple other tools have been developed by the infosec community.
 
@@ -270,17 +274,18 @@ Language: Node.JS
 https://github.com/monkeym4ster/DomainFuzz
 
 
-## Authors and Acknowledgement
+## 😎 Authors and Acknowledgement
 
 - Authored by Andrew Horton (urbanadventurer).
 - Thanks to Ruby on Rails for Inflector which allows plural and singular permutations.
 - Thanks to Wikipedia for the set of common misspellings, homophones, and homoglyphs.
 - Thanks to software77.net for their IP to country database
 
-## Community
+## 🙋 Community
 
-If you have any questions, comments or concerns regarding URLCrazy, please consult the documentation prior to contacting one of the developers. Your feedback is always welcome.
+Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.
 
+Please make sure to update tests as appropriate.
 
 ## License
 
