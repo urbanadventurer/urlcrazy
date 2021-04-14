@@ -8,7 +8,7 @@
 # gzip -d IpToCountry.csv.gz
 # wget 'http://software77.net/geo-ip/?DL=6' -O country-codes.txt
 # 
-# License: Copyright Andrew Horton, 2012-2020. You have permission to use and distribute this software. You do not have permission to distribute modified versions without permission. You do not have permission to use this as part of a commercial service unless it forms part of a penetration testing service. For example a commercial service that provides domain protection for clients must obtain a license first. Email me if you require a license.
+# License: Copyright Andrew Horton, 2012-2021. You have permission to use and distribute this software. You do not have permission to distribute modified versions without permission. You do not have permission to use this as part of a commercial service unless it forms part of a penetration testing service. For example a commercial service that provides domain protection for clients must obtain a license first. Email me if you require a license.
 $DEBUG = false
 
 begin
