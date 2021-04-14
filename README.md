@@ -1,6 +1,6 @@
 [![License](https://img.shields.io/badge/license-Restricted-blue.svg)](https://raw.githubusercontent.com/urbanadventurer/urlcrazy/master/README.md) ![Stable Release](https://img.shields.io/badge/stable_release-0.7.3-blue.svg) [![Repositories](https://repology.org/badge/tiny-repos/urlcrazy.svg)](https://repology.org/project/urlcrazy/versions)
 
-# 🚀 URLCrazy
+# 😜⌨ URLCrazy
 
 URLCrazy is an OSINT tool to generate and test domain typos or variations to detect or perform typo squatting, URL hijacking, phishing, and corporate espionage.
 
@@ -276,7 +276,8 @@ https://github.com/monkeym4ster/DomainFuzz
 
 ## 😎 Authors and Acknowledgement
 
-- Authored by Andrew Horton (urbanadventurer).
+Developed by Andrew Horton (@urbanadventurer).
+
 - Thanks to Ruby on Rails for Inflector which allows plural and singular permutations.
 - Thanks to Wikipedia for the set of common misspellings, homophones, and homoglyphs.
 - Thanks to software77.net for their IP to country database
