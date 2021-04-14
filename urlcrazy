@@ -136,7 +136,7 @@ class Typo
     unless defined? @@resolver # Global Resolver
       $logger.debug "create resolver"
       # $resolver = Async::DNS::Resolver.new( ASYNC_DNS_SERVERS , timeout:30)
-      @@resolver = Async::DNS::Resolver.new( ASYNC_DNS_SERVERS , timeout:30)
+      @@resolver = Async::DNS::Resolver.new( ASYNC_DNS_SERVERS , timeout:60)
     end
 
 #    resolver = Resolv::DNS.new( :nameserver => DNS_SERVERS)  
