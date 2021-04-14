@@ -331,7 +331,7 @@ class TLD
 		@tld[d.split(".")[-1]]
 	end
 
-	def TLD.valid_domain?(d)	
+	def TLD.valid_domain?(d)
 		return false if d.include?('..')
 		extension(d).nil? ? false : true
 	end
