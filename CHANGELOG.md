@@ -1,11 +1,12 @@
 New in Version 0.7.3 (14 April 2021)
 
 ## Bug Fixes
+* Fixed #3 (Invalid domain name against ".co" domain) by updating the .co (Colombia) record to permit 2nd level registration
 * Added Gemfile.lock to the .gitignore.
 
 ## Misc
+* Updated README with emojis
 * Added .gitignore to repo
-
 
 New in Version 0.7.2 (5 January 2021)
 
