@@ -92,7 +92,7 @@ class TLD
 "cl"=>{"type"=>"country","tld"=>"cl","2nd_level_registration"=>true,"foreign_registration"=>false,"country"=>"Chile","slds"=>[]},
 "cm"=>{"type"=>"country","tld"=>"cm","2nd_level_registration"=>true,"foreign_registration"=>false,"country"=>"Cameroon","slds"=>[]},
 "cn"=>{"type"=>"country","tld"=>"cn","2nd_level_registration"=>true,"foreign_registration"=>true,"country"=>"People's Republic of China","slds"=>[]},
-"co"=>{"type"=>"country","tld"=>"co","2nd_level_registration"=>false,"foreign_registration"=>false,"country"=>"Colombia","slds"=>["com.co","org.co","edu.co","gov.co","net.co","mil.co","nom.co"]},
+"co"=>{"type"=>"country","tld"=>"co","2nd_level_registration"=>true,"foreign_registration"=>false,"country"=>"Colombia","slds"=>["com.co","org.co","edu.co","gov.co","net.co","mil.co","nom.co"]},
 "cr"=>{"type"=>"country","tld"=>"cr","2nd_level_registration"=>true,"foreign_registration"=>false,"country"=>"Costa Rica","slds"=>[]},
 "cu"=>{"type"=>"country","tld"=>"cu","2nd_level_registration"=>true,"foreign_registration"=>false,"country"=>"Cuba","slds"=>[]},
 "cv"=>{"type"=>"country","tld"=>"cv","2nd_level_registration"=>true,"foreign_registration"=>false,"country"=>"Cape Verde","slds"=>[]},
