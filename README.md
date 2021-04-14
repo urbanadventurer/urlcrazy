@@ -207,7 +207,7 @@ For example, consider the following typos for google.com.
 | 17842  | ggoogle.com  |
 
 
-## 💣  Known Issues
+## 🔧 Troubleshooting
 
 ### MacOS File Descriptor Limit
 If DNS resolution fails under Macos it could be due to the small default file descriptor limit.
@@ -220,12 +220,14 @@ To increase the file descriptor limit use:
 
 `$ ulimit -n 10000`
 
-### No WHOIS checking
-This tool does not check if a domain has been registered. This is due to WHOIS servers enforcing rate-limiting and banning IP addresses.
-
 ### No results for Wrong TLDs
 
 Check your ulimit and set it to 10000 or a number higher than number of hostnames you are processing.
+
+## 💣  Known Issues
+
+### No WHOIS checking
+This tool does not check if a domain has been registered. This is due to WHOIS servers enforcing rate-limiting and banning IP addresses.
 
 ## 👏 URLCrazy Appearances
 
