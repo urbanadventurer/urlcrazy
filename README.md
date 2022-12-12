@@ -50,7 +50,7 @@ URLCrazy has been tested with Ruby versions 2.4 and 2.6.
 
 If you are using Ubuntu or Debian use:
 
-`$ sudo apt install ruby ruby-dev`
+`$ sudo apt install ruby ruby-dev build-essential`
 
 ### Install Bundler
 
