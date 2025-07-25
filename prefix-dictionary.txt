@@ -1,0 +1,10 @@
+# prefix dictionary
+corp
+http
+https
+https-wwww
+login
+signin
+web
+www
+vpn

@@ -4,7 +4,7 @@
 
 class TLD
 
-  @tlds = File.open($LOAD_PATH.first + "/tlds-alpha-by-domain.txt").readlines.map {|x| next if x[0] == "#" ; x.downcase.strip}.compact
+  @tlds = File.open(File.expand_path(File.join(File.dirname(__FILE__), "tlds-alpha-by-domain.txt"))).readlines.map {|x| next if x[0] == "#" ; x.downcase.strip}.compact
   @tld={}
 
   # seed Intl domains we don't have any SLD data for

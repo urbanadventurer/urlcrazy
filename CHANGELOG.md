@@ -1,3 +1,27 @@
+New in Version 0.8.1 (25 July 2025)
+
+🛠 Ruby compatibility updates, code modernization, and new typo types.
+
+## New Features
+* Added Domain Prefix typo type with prefix-dictionary.txt support
+* Added Domain Suffix typo type with suffix-dictionary.txt support
+
+## Core Improvements
+* Updated codebase to work with latest Ruby versions
+* Replaced deprecated methods (File.exists? with File.exist?)
+* Fixed path resolution by replacing deprecated $LOAD_PATH.first usage with proper File.expand_path and relative paths
+* Removed problematic resolv-replace dependency that was causing compatibility issues
+
+## Code Modernization
+* Refactored monolithic structure into modular architecture with dedicated lib/ directory
+* Extracted core classes (Keyboard, Typo, Domainname) into separate files for better maintainability
+* Cleaned up Gemfile dependencies
+
+## Bug Fixes
+* Added robust DNS error handling and fallback mechanisms
+* Implemented null safety checks to prevent resolution errors
+
+
 New in Version 0.7.3 (14 April 2021)
 
 🛠 Minor update with some bug fixes and improvements to the README.md.

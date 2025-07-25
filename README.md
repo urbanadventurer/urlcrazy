@@ -1,10 +1,10 @@
-[![License](https://img.shields.io/badge/license-Restricted-blue.svg)](https://raw.githubusercontent.com/urbanadventurer/urlcrazy/master/README.md) ![Stable Release](https://img.shields.io/badge/stable_release-0.7.3-blue.svg) [![Repositories](https://repology.org/badge/tiny-repos/urlcrazy.svg)](https://repology.org/project/urlcrazy/versions)
+[![License](https://img.shields.io/badge/license-Restricted-blue.svg)](https://raw.githubusercontent.com/urbanadventurer/urlcrazy/master/README.md) ![Stable Release](https://img.shields.io/badge/stable_release-0.8.1-blue.svg) [![Repositories](https://repology.org/badge/tiny-repos/urlcrazy.svg)](https://repology.org/project/urlcrazy/versions)
 
 # 😜⌨ URLCrazy
 
 URLCrazy is an OSINT tool to generate and test domain typos or variations to detect or perform typo squatting, URL hijacking, phishing, and corporate espionage.
 
-Homepage:  https://morningstarsecurity.com/research/urlcrazy
+Homepage: https://github.com/urbanadventurer/urlcrazy
 
 ## 🌟 Use Cases
 * Detect typo squatters profiting from typos on your domain name
@@ -94,8 +94,8 @@ db    db d8888b. db       .o88b. d8888b.  .d8b.  d88888D db    db
 88b  d88 88 `88. 88booo. Y8b  d8 88 `88. 88   88  d8' db    88
 ~Y8888P' 88   YD Y88888P  `Y88P' 88   YD YP   YP d88888P    YP
 
-URLCrazy version 0.7.3 by Andrew Horton (urbanadventurer)
-Visit https://morningstarsecurity.com/research/urlcrazy
+URLCrazy version 0.8.1 by Andrew Horton (urbanadventurer)
+Visit https://github.com/urbanadventurer/urlcrazy
 
 Generate and test domain typos and variations to detect and perform typo squatting, URL hijacking,
 phishing, and corporate espionage.
@@ -104,7 +104,7 @@ Supports the following domain variations:
 Character omission, character repeat, adjacent character swap, adjacent character replacement, double
 character replacement, adjacent character insertion, missing dot, strip dashes, insert dash,
 singular or pluralise, common misspellings, vowel swaps, homophones, bit flipping (cosmic rays),
-homoglyphs, wrong top level domain, and wrong second level domain.
+homoglyphs, domain prefix, domain suffix, wrong top level domain, and wrong second level domain.
 
 Usage: ./urlcrazy [options] domain
 
@@ -172,6 +172,14 @@ Uses the 19 most common top level domains.
 ### Wrong Second Level Domain
 Uses an alternate, valid second level domain for the top level domain.
 For example, www.trademe.co.nz becomes www.trademe.ac.nz and www.trademe.iwi.nz
+
+### Domain Prefix
+These typos are created by adding a prefix from the prefix-dictionary.txt file with a hyphen to the domain name.
+For example, example.com becomes login-example.com and corp-example.com
+
+### Domain Suffix
+These typos are created by adding a suffix from the suffix-dictionary.txt file with a hyphen to the domain name.
+For example, example.com becomes example-login.com and example-microsoft.com
 
 
 ## ⌨ Supported Keyboard Layouts

@@ -14,7 +14,7 @@ class CommonMisspellings
 
 	$ENABLE_REVERSE_MISPELLING = true 
 
-	@@file_contents=File.readlines($LOAD_PATH.first + "/common-misspellings.txt").delete_if { |line| line =~ /^#/ or line =~ /^[ ]*$/ }.join
+	@@file_contents=File.readlines(File.expand_path(File.join(File.dirname(__FILE__), "common-misspellings.txt"))).delete_if { |line| line =~ /^#/ or line =~ /^[ ]*$/ }.join
 
 	def self.dictionary
 		setup unless defined? @@dictionary

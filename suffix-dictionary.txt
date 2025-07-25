@@ -1,0 +1,5 @@
+# suffix dictionary
+sso
+login
+365
+microsoft

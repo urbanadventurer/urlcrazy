@@ -1,5 +1,5 @@
 class Homophones
-	@@homophones=File.readlines($LOAD_PATH.first + "/homophones.txt").delete_if { |line| line =~ /^#/ or line =~ /^[ ]*$/ }.join
+	@@homophones=File.readlines(File.expand_path(File.join(File.dirname(__FILE__), "homophones.txt"))).delete_if { |line| line =~ /^#/ or line =~ /^[ ]*$/ }.join
 
 	def self.dictionary
 		setup unless defined? @@dictionary

@@ -15,10 +15,10 @@ def Countrylookup.startup
 folder=File.expand_path(File.dirname(__FILE__))	
 country_db = folder + "/country-ips.dat"
 
-if File.exists?(country_db)
+if File.exist?(country_db)
   @rfile=File.open(country_db,"rb")
 else
-  if File.exists?(folder + "/IpToCountry.csv")
+  if File.exist?(folder + "/IpToCountry.csv")
 		# pack that file & do it once
    last_start=nil
    last_end=nil
