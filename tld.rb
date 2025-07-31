@@ -144,7 +144,7 @@ class TLD
 "hr"=>{"type"=>"country","tld"=>"hr","2nd_level_registration"=>true,"foreign_registration"=>false,"country"=>"Croatia","slds"=>[]},
 "ht"=>{"type"=>"country","tld"=>"ht","2nd_level_registration"=>true,"foreign_registration"=>false,"country"=>"Haiti","slds"=>[]},
 "hu"=>{"type"=>"country","tld"=>"hu","2nd_level_registration"=>true,"foreign_registration"=>true,"country"=>"Hungary","slds"=>[]},
-"id"=>{"type"=>"country","tld"=>"id","2nd_level_registration"=>false,"foreign_registration"=>false,"country"=>"Indonesia","slds"=>["ac.id","co.id","net.id","or.id","web.id","sch.id","mil.id","go.id"]},
+"id"=>{"type"=>"country","tld"=>"id","2nd_level_registration"=>true,"foreign_registration"=>false,"country"=>"Indonesia","slds"=>["ac.id","co.id","net.id","or.id","web.id","sch.id","mil.id","go.id"]},
 "ie"=>{"type"=>"country","tld"=>"ie","2nd_level_registration"=>true,"foreign_registration"=>false,"country"=>"Ireland","slds"=>[]},
 "il"=>{"type"=>"country","tld"=>"il","2nd_level_registration"=>false,"foreign_registration"=>true,"country"=>"Israel","slds"=>["ac.il","co.il","org.il","net.il","k12.il","gov.il","muni.il","idf.il"]},
 "im"=>{"type"=>"country","tld"=>"im","2nd_level_registration"=>true,"foreign_registration"=>true,"country"=>"Isle of Man","slds"=>[]},
